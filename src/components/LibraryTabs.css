@@ -1,0 +1,63 @@
+.biblio-tete {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.biblio-tete h2 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+
+.onglets {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.onglet {
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 8px 18px;
+  border-radius: 99px;
+  border: 1.5px solid var(--trait);
+  background: var(--blanc);
+  color: var(--gris);
+  transition: all 0.15s;
+}
+
+.onglet:hover {
+  border-color: var(--rose);
+  color: var(--rouge);
+}
+
+.onglet.actif {
+  background: var(--rouge);
+  border-color: var(--rouge);
+  color: #fff;
+}
+
+.onglet .n {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  opacity: 0.75;
+  margin-left: 5px;
+}
+
+.filtres {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+}
+
+.filtre {
+  font-size: 0.8rem;
+  color: var(--gris);
+  background: var(--blanc);
+  border: 1px solid var(--trait);
+  border-radius: 8px;
+  padding: 7px 12px;
+}

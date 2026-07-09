@@ -1,0 +1,253 @@
+.page-groupes {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 900px;
+}
+
+.groupe-formulaires {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.form-groupe {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.form-groupe .champ-social {
+  flex: 1;
+}
+
+.form-groupe .champ-social.code {
+  font-family: 'Space Mono', monospace;
+  text-transform: uppercase;
+}
+
+.erreur-groupe {
+  font-size: 0.85rem;
+  color: var(--rouge);
+}
+
+/* ===== Détail d'un groupe ===== */
+.detail-groupe {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.groupe-entete {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  background: var(--blanc);
+  border: 1px solid var(--trait);
+  border-radius: 16px;
+  padding: 20px 24px;
+}
+
+.groupe-entete h2 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 1.3rem;
+  margin-bottom: 6px;
+}
+
+.code-invitation {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  background: var(--rose-pale);
+  color: var(--rouge);
+  border: 1px dashed var(--rose);
+  border-radius: 8px;
+  padding: 5px 12px;
+  transition: all 0.15s;
+}
+
+.code-invitation:hover {
+  background: var(--rouge);
+  border-color: var(--rouge);
+  color: #fff;
+}
+
+.groupe-colonnes {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 800px) {
+  .groupe-colonnes {
+    grid-template-columns: 1fr;
+  }
+}
+
+.btn-rafraichir {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  color: var(--gris);
+  margin-left: 8px;
+  padding: 0 4px;
+  transition: color 0.15s;
+}
+
+.btn-rafraichir:hover {
+  color: var(--rouge);
+}
+
+.fil-activite {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 420px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+.fil-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  transition: background 0.15s;
+}
+
+.fil-item:hover {
+  background: var(--rose-pale);
+}
+
+.fil-texte {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.88rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.fil-texte b {
+  font-weight: 600;
+  color: var(--rouge);
+}
+
+.fil-temps {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--gris);
+}
+
+.btn-repondre {
+  background: none;
+  border: none;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--gris);
+  padding: 2px 6px;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s;
+}
+
+.fil-item:hover .btn-repondre {
+  opacity: 1;
+}
+
+.btn-repondre:hover {
+  color: var(--rouge);
+}
+
+/* ===== Messages ===== */
+.msg-temps {
+  margin-left: 8px;
+}
+
+.msg-citation {
+  font-size: 0.72rem;
+  color: var(--gris);
+  background: var(--creme);
+  border-left: 2px solid var(--rose);
+  border-radius: 0 8px 8px 0;
+  padding: 4px 10px;
+  margin: 2px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.msg-contenu {
+  background: var(--rose-pale);
+  border-radius: 4px 12px 12px 12px;
+  padding: 7px 12px;
+  align-self: flex-start;
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+/* ===== Composeur ===== */
+.composeur {
+  margin-top: 12px;
+  border-top: 1px solid var(--trait);
+  padding-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.composeur-reponse {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  color: var(--gris);
+  background: var(--creme);
+  border-left: 2px solid var(--rose);
+  border-radius: 0 8px 8px 0;
+  padding: 6px 10px;
+}
+
+.composeur-reponse span {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.composeur-reponse b {
+  color: var(--rouge);
+}
+
+.composeur-reponse button {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--gris);
+  padding: 0 4px;
+}
+
+.composeur-reponse button:hover {
+  color: var(--rouge);
+}
+
+.composeur-ligne {
+  display: flex;
+  gap: 10px;
+}
+
+.composeur-ligne .champ-social {
+  flex: 1;
+}
+
+.btn-social:disabled {
+  opacity: 0.5;
+  cursor: default;
+}

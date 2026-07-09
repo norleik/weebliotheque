@@ -1,0 +1,121 @@
+.recherche-conteneur {
+  position: relative;
+  min-width: 380px;
+  flex: 1;
+  max-width: 480px;
+}
+
+.recherche {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--creme);
+  border: 1px solid var(--trait);
+  border-radius: 99px;
+  padding: 11px 20px;
+  color: var(--gris);
+  font-size: 0.95rem;
+}
+
+.recherche input {
+  border: none;
+  background: none;
+  outline: none;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  color: var(--encre);
+  width: 100%;
+}
+
+.recherche input::placeholder {
+  color: var(--gris);
+}
+
+.recherche-resultats {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: var(--blanc);
+  border: 1px solid var(--trait);
+  border-radius: 14px;
+  box-shadow: 0 12px 28px rgba(35, 26, 28, 0.14);
+  max-height: 440px;
+  overflow-y: auto;
+  z-index: 30;
+  padding: 8px;
+}
+
+.recherche-etat {
+  padding: 14px 12px;
+  font-size: 0.82rem;
+  color: var(--gris);
+  text-align: center;
+}
+
+.resultat {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px;
+  border-radius: 10px;
+  transition: background 0.15s;
+}
+
+.resultat:hover {
+  background: var(--rose-pale);
+}
+
+.resultat img {
+  width: 44px;
+  height: 58px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.resultat-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.resultat-type {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  color: var(--rouge);
+}
+
+.resultat-titre {
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.resultat-btn {
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: var(--rose-pale);
+  color: var(--rouge);
+  border: none;
+  border-radius: 8px;
+  padding: 6px 10px;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+
+.resultat-btn:hover:not(:disabled) {
+  background: var(--rouge);
+  color: #fff;
+}
+
+.resultat-btn:disabled {
+  background: var(--creme);
+  color: var(--gris);
+  cursor: default;
+}

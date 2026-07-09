@@ -1,0 +1,231 @@
+.grille {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 16px;
+}
+
+.oeuvre {
+  background: var(--blanc);
+  border: 1px solid var(--trait);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.18s, box-shadow 0.18s;
+}
+
+.oeuvre:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(214, 40, 57, 0.12);
+}
+
+.cover {
+  height: 150px;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: 12px;
+  background-size: cover;
+  background-position: center;
+}
+
+.cover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent 65%);
+}
+
+.cover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.4) 1px, transparent 1px);
+  background-size: 8px 8px;
+  opacity: 0.18;
+  mask-image: linear-gradient(115deg, transparent 55%, #000);
+}
+
+.cover h3 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  position: relative;
+  z-index: 1;
+  line-height: 1.2;
+}
+
+.cover .type {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--rouge);
+  border-radius: 6px;
+  padding: 3px 8px;
+}
+
+.cover .note-c {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: 'Outfit', sans-serif;
+  background: var(--encre);
+  color: var(--rose);
+  border-radius: 6px;
+  padding: 4px 8px;
+  border: none;
+  z-index: 1;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.cover .note-c.vide {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.cover .note-c:hover {
+  background: var(--rouge);
+}
+
+.cover .note-c option {
+  color: var(--encre);
+  background: var(--blanc);
+}
+
+.cover .note-c.statique {
+  cursor: default;
+}
+
+.cover .note-c.statique:hover {
+  background: var(--encre);
+}
+
+.cv-1 { background: linear-gradient(135deg, #7a1e2b, #d62839); }
+.cv-2 { background: linear-gradient(135deg, #2b4570, #5886c9); }
+.cv-3 { background: linear-gradient(135deg, #1e5c4f, #3fa98e); }
+.cv-4 { background: linear-gradient(135deg, #6b3fa0, #a06bd6); }
+.cv-5 { background: linear-gradient(135deg, #a34a1f, #e08d3c); }
+.cv-6 { background: linear-gradient(135deg, #8f1d4e, #e0559b); }
+.cv-7 { background: linear-gradient(135deg, #26547c, #4cc9f0); }
+.cv-8 { background: linear-gradient(135deg, #4a4e69, #9a8c98); }
+
+.oeuvre-corps {
+  padding: 12px;
+}
+
+.prog-lab {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--gris);
+  margin-bottom: 6px;
+}
+
+.prog-lab b {
+  font-family: 'Space Mono', monospace;
+  color: var(--rouge);
+  font-size: 0.75rem;
+}
+
+.barre {
+  height: 6px;
+  border-radius: 99px;
+  background: var(--rose-pale);
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.barre i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--rouge), var(--rose));
+  border-radius: 99px;
+}
+
+.oeuvre .btn-suivi {
+  display: block;
+  width: 100%;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-align: center;
+  background: var(--rose-pale);
+  color: var(--rouge);
+  border: none;
+  border-radius: 8px;
+  padding: 8px;
+  box-sizing: border-box;
+  transition: all 0.15s;
+}
+
+.oeuvre .btn-suivi:hover {
+  background: var(--rouge);
+  color: #fff;
+}
+
+.fini .btn-suivi {
+  background: var(--creme);
+  color: var(--gris);
+}
+
+.liens-secondaires {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+
+.lien-fiche {
+  font-size: 0.7rem;
+  color: var(--gris);
+  transition: color 0.15s;
+}
+
+.lien-fiche:hover {
+  color: var(--rouge);
+}
+
+.btn-retirer {
+  margin-left: auto;
+  background: none;
+  border: none;
+  font-size: 0.7rem;
+  color: var(--gris);
+  padding: 4px;
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s;
+}
+
+.oeuvre:hover .btn-retirer {
+  opacity: 1;
+}
+
+.btn-retirer:hover {
+  color: var(--rouge);
+}
+
+.grille-vide {
+  background: var(--blanc);
+  border: 1px dashed var(--trait);
+  border-radius: 16px;
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--gris);
+  font-size: 0.9rem;
+}
+
+.etoiles {
+  color: var(--rouge);
+  letter-spacing: 1px;
+  font-size: 0.72rem;
+}
+
+.etoiles .off {
+  color: var(--trait);
+}

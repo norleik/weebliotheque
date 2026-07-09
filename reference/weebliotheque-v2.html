@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weebliothèque — Profil de Leo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blanc:#FFFFFF;
+    --creme:#FAF7F7;
+    --trait:#F0E3E4;
+    --encre:#231A1C;
+    --gris:#8C7A7E;
+    --rouge:#D62839;
+    --rouge-fonce:#A31621;
+    --rose:#FFB3C1;
+    --rose-pale:#FFF0F3;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    background:var(--creme);
+    color:var(--encre);
+    font-family:'Outfit',sans-serif;
+    font-weight:400;
+    min-height:100vh;
+  }
+  a{color:inherit;text-decoration:none}
+  button{font-family:'Outfit',sans-serif;cursor:pointer}
+
+  /* ===== HEADER ===== */
+  header{
+    background:var(--blanc);
+    border-bottom:1px solid var(--trait);
+    position:sticky;top:0;z-index:10;
+  }
+  .header-in{
+    max-width:1200px;margin:0 auto;
+    display:flex;align-items:center;gap:32px;
+    padding:14px 24px;
+  }
+  .logo{
+    font-family:'Syne',sans-serif;
+    font-weight:800;font-size:1.25rem;
+    letter-spacing:-.02em;
+  }
+  .logo .w{color:var(--rouge)}
+  .logo-kata{
+    font-family:'Space Mono',monospace;
+    font-size:.55rem;color:var(--rose);
+    letter-spacing:.3em;display:block;margin-top:2px;
+  }
+  nav{display:flex;gap:6px;flex:1}
+  .nav-item{
+    padding:8px 16px;border-radius:99px;
+    font-size:.9rem;font-weight:500;color:var(--gris);
+    transition:all .15s;
+  }
+  .nav-item:hover{background:var(--rose-pale);color:var(--rouge)}
+  .nav-item.actif{background:var(--rouge);color:#fff}
+  .recherche{
+    display:flex;align-items:center;gap:8px;
+    background:var(--creme);
+    border:1px solid var(--trait);
+    border-radius:99px;
+    padding:8px 16px;
+    color:var(--gris);font-size:.85rem;
+    min-width:220px;
+  }
+  .avatar{
+    border-radius:12px;
+    display:grid;place-items:center;
+    font-family:'Syne',sans-serif;font-weight:800;color:#fff;
+    flex-shrink:0;
+  }
+  .av-leo{background:linear-gradient(135deg,var(--rouge),var(--rouge-fonce))}
+  .header-in .avatar{width:38px;height:38px;font-size:.9rem}
+
+  .page{max-width:1200px;margin:0 auto;padding:32px 24px 80px}
+
+  /* ===== BANNIERE PROFIL ===== */
+  .profil-banner{
+    background:var(--blanc);
+    border:1px solid var(--trait);
+    border-radius:20px;
+    overflow:hidden;
+    margin-bottom:28px;
+  }
+  .banner-haut{
+    height:110px;
+    background:linear-gradient(120deg,var(--rouge-fonce),var(--rouge) 55%,var(--rose));
+    position:relative;
+  }
+  .banner-haut::after{
+    content:"";position:absolute;inset:0;
+    background-image:radial-gradient(rgba(255,255,255,.5) 1.2px, transparent 1.2px);
+    background-size:10px 10px;
+    opacity:.25;
+    mask-image:linear-gradient(100deg,transparent 45%,#000);
+  }
+  .banner-haut .kata{
+    position:absolute;right:24px;top:20px;
+    font-family:'Space Mono',monospace;
+    color:rgba(255,255,255,.85);
+    font-size:.7rem;letter-spacing:.4em;
+  }
+  .banner-corps{
+    display:flex;align-items:flex-end;gap:20px;
+    padding:0 28px 24px;
+    margin-top:-38px;
+    flex-wrap:wrap;
+  }
+  .banner-corps .avatar{
+    width:88px;height:88px;font-size:2rem;
+    border:4px solid var(--blanc);
+    border-radius:22px;
+    box-shadow:0 4px 16px rgba(214,40,57,.25);
+  }
+  .identite{flex:1;min-width:200px;padding-bottom:4px}
+  .identite h1{
+    font-family:'Syne',sans-serif;
+    font-weight:800;font-size:1.7rem;letter-spacing:-.02em;
+  }
+  .identite .pseudo{
+    font-family:'Space Mono',monospace;
+    font-size:.75rem;color:var(--gris);
+  }
+  .identite .badges{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+  .badge{
+    font-size:.72rem;font-weight:600;
+    padding:4px 10px;border-radius:99px;
+    background:var(--rose-pale);color:var(--rouge);
+    border:1px solid var(--rose);
+  }
+  .btn-editer{
+    font-weight:600;font-size:.85rem;
+    background:var(--blanc);color:var(--rouge);
+    border:1.5px solid var(--rouge);
+    border-radius:10px;padding:10px 20px;
+    margin-bottom:6px;
+    transition:all .15s;
+  }
+  .btn-editer:hover{background:var(--rouge);color:#fff}
+
+  /* ===== STATS ===== */
+  .stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:14px;
+    margin-bottom:36px;
+  }
+  .stat{
+    background:var(--blanc);
+    border:1px solid var(--trait);
+    border-radius:16px;
+    padding:18px 20px;
+    position:relative;
+    overflow:hidden;
+  }
+  .stat::before{
+    content:"";position:absolute;top:0;left:0;
+    width:100%;height:3px;
+    background:var(--rouge);
+  }
+  .stat.rose::before{background:var(--rose)}
+  .stat .val{
+    font-family:'Syne',sans-serif;
+    font-weight:800;font-size:1.7rem;
+    color:var(--rouge);
+    letter-spacing:-.02em;
+  }
+  .stat.rose .val{color:var(--encre)}
+  .stat .lab{font-size:.8rem;color:var(--gris);margin-top:2px}
+  .stat .detail{
+    font-family:'Space Mono',monospace;
+    font-size:.65rem;color:var(--rose);
+    margin-top:8px;display:block;
+  }
+
+  /* ===== ONGLETS BIBLIOTHEQUE ===== */
+  .biblio-tete{
+    display:flex;align-items:center;gap:16px;
+    margin-bottom:20px;flex-wrap:wrap;
+  }
+  .biblio-tete h2{
+    font-family:'Syne',sans-serif;
+    font-weight:700;font-size:1.3rem;
+  }
+  .onglets{display:flex;gap:6px;flex-wrap:wrap}
+  .onglet{
+    font-size:.85rem;font-weight:600;
+    padding:8px 18px;border-radius:99px;
+    border:1.5px solid var(--trait);
+    background:var(--blanc);color:var(--gris);
+    transition:all .15s;
+  }
+  .onglet:hover{border-color:var(--rose);color:var(--rouge)}
+  .onglet.actif{background:var(--rouge);border-color:var(--rouge);color:#fff}
+  .onglet .n{
+    font-family:'Space Mono',monospace;
+    font-size:.7rem;opacity:.75;margin-left:5px;
+  }
+  .filtres{
+    margin-left:auto;
+    display:flex;gap:8px;
+  }
+  .filtre{
+    font-size:.8rem;color:var(--gris);
+    background:var(--blanc);
+    border:1px solid var(--trait);
+    border-radius:8px;padding:7px 12px;
+  }
+
+  /* ===== GRILLE ŒUVRES ===== */
+  .grille{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(190px,1fr));
+    gap:16px;
+  }
+  .oeuvre{
+    background:var(--blanc);
+    border:1px solid var(--trait);
+    border-radius:16px;
+    overflow:hidden;
+    transition:transform .18s, box-shadow .18s;
+  }
+  .oeuvre:hover{
+    transform:translateY(-4px);
+    box-shadow:0 10px 24px rgba(214,40,57,.12);
+  }
+  .cover{
+    height:150px;position:relative;
+    display:flex;align-items:flex-end;
+    padding:12px;
+  }
+  .cover::after{
+    content:"";position:absolute;inset:0;
+    background-image:radial-gradient(rgba(255,255,255,.4) 1px, transparent 1px);
+    background-size:8px 8px;opacity:.18;
+    mask-image:linear-gradient(115deg,transparent 55%,#000);
+  }
+  .cover h3{
+    font-family:'Syne',sans-serif;
+    font-weight:700;font-size:1rem;color:#fff;
+    text-shadow:0 2px 8px rgba(0,0,0,.4);
+    position:relative;z-index:1;line-height:1.2;
+  }
+  .cover .type{
+    position:absolute;top:10px;left:10px;
+    font-family:'Space Mono',monospace;
+    font-size:.6rem;font-weight:700;letter-spacing:.15em;
+    background:rgba(255,255,255,.92);color:var(--rouge);
+    border-radius:6px;padding:3px 8px;
+  }
+  .cover .note-c{
+    position:absolute;top:10px;right:10px;
+    font-size:.7rem;font-weight:700;
+    background:var(--encre);color:var(--rose);
+    border-radius:6px;padding:3px 8px;
+  }
+  .cv-1{background:linear-gradient(135deg,#7A1E2B,#D62839)}
+  .cv-2{background:linear-gradient(135deg,#2B4570,#5886C9)}
+  .cv-3{background:linear-gradient(135deg,#1E5C4F,#3FA98E)}
+  .cv-4{background:linear-gradient(135deg,#6B3FA0,#A06BD6)}
+  .cv-5{background:linear-gradient(135deg,#A34A1F,#E08D3C)}
+  .cv-6{background:linear-gradient(135deg,#8F1D4E,#E0559B)}
+  .cv-7{background:linear-gradient(135deg,#26547C,#4CC9F0)}
+  .cv-8{background:linear-gradient(135deg,#4A4E69,#9A8C98)}
+
+  .oeuvre-corps{padding:12px}
+  .prog-lab{
+    display:flex;justify-content:space-between;
+    font-size:.75rem;color:var(--gris);
+    margin-bottom:6px;
+  }
+  .prog-lab b{
+    font-family:'Space Mono',monospace;
+    color:var(--rouge);font-size:.75rem;
+  }
+  .barre{
+    height:6px;border-radius:99px;
+    background:var(--rose-pale);
+    overflow:hidden;margin-bottom:10px;
+  }
+  .barre i{
+    display:block;height:100%;
+    background:linear-gradient(90deg,var(--rouge),var(--rose));
+    border-radius:99px;
+  }
+  .oeuvre .btn-suivi{
+    width:100%;
+    font-size:.78rem;font-weight:600;
+    background:var(--rose-pale);color:var(--rouge);
+    border:none;border-radius:8px;
+    padding:8px;
+    transition:all .15s;
+  }
+  .oeuvre .btn-suivi:hover{background:var(--rouge);color:#fff}
+  .fini .btn-suivi{background:var(--creme);color:var(--gris)}
+
+  .etoiles{color:var(--rouge);letter-spacing:1px;font-size:.72rem}
+  .etoiles .off{color:var(--trait)}
+
+  .badge-maquette{
+    position:fixed;bottom:16px;left:16px;
+    font-family:'Space Mono',monospace;
+    font-size:.62rem;letter-spacing:.2em;
+    color:var(--gris);
+    background:var(--blanc);
+    border:1px solid var(--trait);
+    border-radius:99px;
+    padding:6px 14px;z-index:20;
+  }
+
+  @media (max-width:800px){
+    nav{display:none}
+    .recherche{min-width:0;flex:1}
+    .filtres{margin-left:0}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none!important}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-in">
+    <a href="#" class="logo">
+      <span class="w">Weeb</span>liothèque
+      <span class="logo-kata">ウィーブ・図書館</span>
+    </a>
+    <nav>
+      <a class="nav-item actif" href="#">Profil</a>
+      <a class="nav-item" href="#">Le groupe</a>
+      <a class="nav-item" href="#">Découvrir</a>
+      <a class="nav-item" href="#">Calendrier</a>
+    </nav>
+    <div class="recherche">🔍 Rechercher un animé, manga, LN…</div>
+    <div class="avatar av-leo">L</div>
+  </div>
+</header>
+
+<div class="page">
+
+  <!-- ===== BANNIÈRE PROFIL ===== -->
+  <section class="profil-banner">
+    <div class="banner-haut">
+      <span class="kata">プロフィール</span>
+    </div>
+    <div class="banner-corps">
+      <div class="avatar av-leo">L</div>
+      <div class="identite">
+        <h1>Leo</h1>
+        <span class="pseudo">@leo · membre depuis juillet 2026</span>
+        <div class="badges">
+          <span class="badge">🔥 Série de 12 jours</span>
+          <span class="badge">👥 4 amis</span>
+          <span class="badge">🔗 Compte MAL lié</span>
+        </div>
+      </div>
+      <button class="btn-editer">Modifier le profil</button>
+    </div>
+  </section>
+
+  <!-- ===== STATS ===== -->
+  <section class="stats">
+    <div class="stat">
+      <div class="val">1 247</div>
+      <div class="lab">Épisodes vus</div>
+      <span class="detail">+23 CE MOIS-CI</span>
+    </div>
+    <div class="stat">
+      <div class="val">21 j 6 h</div>
+      <div class="lab">Temps devant les animés</div>
+      <span class="detail">≈ 30 600 MINUTES</span>
+    </div>
+    <div class="stat rose">
+      <div class="val">3 482</div>
+      <div class="lab">Chapitres lus</div>
+      <span class="detail">MANGA · LN · MANHWA</span>
+    </div>
+    <div class="stat">
+      <div class="val">86</div>
+      <div class="lab">Œuvres terminées</div>
+      <span class="detail">DONT 12 EN 2026</span>
+    </div>
+    <div class="stat rose">
+      <div class="val">7,8</div>
+      <div class="lab">Note moyenne</div>
+      <span class="detail">SUR 64 ŒUVRES NOTÉES</span>
+    </div>
+  </section>
+
+  <!-- ===== BIBLIOTHÈQUE ===== -->
+  <div class="biblio-tete">
+    <h2>Ma bibliothèque</h2>
+    <div class="onglets">
+      <button class="onglet actif">Animés <span class="n">31</span></button>
+      <button class="onglet">Mangas <span class="n">18</span></button>
+      <button class="onglet">Light novels <span class="n">5</span></button>
+      <button class="onglet">Manhwas <span class="n">9</span></button>
+    </div>
+    <div class="filtres">
+      <span class="filtre">En cours ▾</span>
+      <span class="filtre">Récents ▾</span>
+    </div>
+  </div>
+
+  <div class="grille">
+
+    <article class="oeuvre">
+      <div class="cover cv-1">
+        <span class="type">ANIMÉ</span>
+        <span class="note-c">★ 9</span>
+        <h3>Solo Leveling S2</h3>
+      </div>
+      <div class="oeuvre-corps">
+        <div class="prog-lab"><span>Épisodes</span><b>8 / 12</b></div>
+        <div class="barre"><i style="width:66%"></i></div>
+        <button class="btn-suivi">Épisode 9 vu ✓</button>
+      </div>
+    </article>
+
+    <article class="oeuvre">
+      <div class="cover cv-2">
+        <span class="type">ANIMÉ</span>
+        <span class="note-c">★ 10</span>
+        <h3>Frieren</h3>
+      </div>
+      <div class="oeuvre-corps">
+        <div class="prog-lab"><span>Épisodes</span><b>14 / 28</b></div>
+        <div class="barre"><i style="width:50%"></i></div>
+        <button class="btn-suivi">Épisode 15 vu ✓</button>
+      </div>
+    </article>
+
+    <article class="oeuvre">
+      <div class="cover cv-3">
+        <span class="type">MANHWA</span>
+        <span class="note-c">★ 8</span>
+        <h3>Omniscient Reader</h3>
+      </div>
+      <div class="oeuvre-corps">
+        <div class="prog-lab"><span>Chapitres</span><b>112 / 230</b></div>
+        <div class="barre"><i style="width:48%"></i></div>
+        <button class="btn-suivi">Chapitre 113 lu ✓</button>
+      </div>
+    </article>
+
+    <article class="oeuvre">
+      <div class="cover cv-4">
+        <span class="type">MANGA</span>
+        <span class="note-c">★ 9</span>
+        <h3>Chainsaw Man</h3>
+      </div>
+      <div class="oeuvre-corps">
+        <div class="prog-lab"><span>Chapitres</span><b>178 / 191</b></div>
+        <div class="barre"><i style="width:93%"></i></div>
+        <button class="btn-suivi">Chapitre 179 lu ✓</button>
+      </div>
+    </article>
+
+    <article class="oeuvre">
+      <div class="cover cv-5">
+        <span class="type">LIGHT NOVEL</span>
+        <span class="note-c">★ 8</span>
+        <h3>Mushoku Tensei</h3>
+      </div>
+      <div class="oeuvre-corps">
+        <div class="prog-lab"><span>Tomes</span><b>14 / 26</b></div>
+        <div class="barre"><i style="width:54%"></i></div>
+        <button class="btn-suivi">Tome 15 lu ✓</button>
+      </div>
+    </article>
+
+    <article class="oeuvre">
+      <div class="cover cv-6">
+        <span class="type">ANIMÉ</span>
+        <span class="note-c">★ 8</span>
+        <h3>Jujutsu Kaisen S3</h3>
+      </div>
+      <div class="oeuvre-corps">
+        <div class="prog-lab"><span>Épisodes</span><b>2 / 12</b></div>
+        <div class="barre"><i style="width:17%"></i></div>
+        <button class="btn-suivi">Épisode 3 vu ✓</button>
+      </div>
+    </article>
+
+    <article class="oeuvre">
+      <div class="cover cv-7">
+        <span class="type">MANHWA</span>
+        <span class="note-c">★ 9</span>
+        <h3>Tower of God</h3>
+      </div>
+      <div class="oeuvre-corps">
+        <div class="prog-lab"><span>Chapitres</span><b>590 / 612</b></div>
+        <div class="barre"><i style="width:96%"></i></div>
+        <button class="btn-suivi">Chapitre 591 lu ✓</button>
+      </div>
+    </article>
+
+    <article class="oeuvre fini">
+      <div class="cover cv-8">
+        <span class="type">ANIMÉ</span>
+        <span class="note-c">★ 10</span>
+        <h3>Vinland Saga S2</h3>
+      </div>
+      <div class="oeuvre-corps">
+        <div class="prog-lab"><span>Terminé</span><span class="etoiles">★★★★★</span></div>
+        <div class="barre"><i style="width:100%"></i></div>
+        <button class="btn-suivi">Revoir la fiche</button>
+      </div>
+    </article>
+
+  </div>
+
+</div>
+
+<div class="badge-maquette">MAQUETTE · NON FONCTIONNEL</div>
+
+</body>
+</html>

@@ -1,0 +1,105 @@
+.profil-banner {
+  background: var(--blanc);
+  border: 1px solid var(--trait);
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 28px;
+}
+
+.banner-haut {
+  height: 110px;
+  background: linear-gradient(120deg, var(--rouge-fonce), var(--rouge) 55%, var(--rose));
+  position: relative;
+}
+
+.banner-haut::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.5) 1.2px, transparent 1.2px);
+  background-size: 10px 10px;
+  opacity: 0.25;
+  mask-image: linear-gradient(100deg, transparent 45%, #000);
+}
+
+.banner-haut .kata {
+  position: absolute;
+  right: 24px;
+  top: 20px;
+  font-family: 'Space Mono', monospace;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.7rem;
+  letter-spacing: 0.4em;
+}
+
+.banner-corps {
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+  padding: 8px 28px 24px;
+  flex-wrap: wrap;
+}
+
+.banner-corps .avatar {
+  position: relative;
+  top: -48px;
+  width: 88px;
+  height: 88px;
+  font-size: 2rem;
+  border: 4px solid var(--blanc);
+  border-radius: 22px;
+  box-shadow: 0 4px 16px rgba(214, 40, 57, 0.25);
+}
+
+.identite {
+  flex: 1;
+  min-width: 200px;
+  padding-bottom: 4px;
+}
+
+.identite h1 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 1.7rem;
+  letter-spacing: -0.02em;
+}
+
+.identite .pseudo {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--gris);
+}
+
+.identite .badges {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 99px;
+  background: var(--rose-pale);
+  color: var(--rouge);
+  border: 1px solid var(--rose);
+}
+
+.btn-editer {
+  font-weight: 600;
+  font-size: 0.85rem;
+  background: var(--blanc);
+  color: var(--rouge);
+  border: 1.5px solid var(--rouge);
+  border-radius: 10px;
+  padding: 10px 20px;
+  margin-bottom: 6px;
+  transition: all 0.15s;
+}
+
+.btn-editer:hover {
+  background: var(--rouge);
+  color: #fff;
+}

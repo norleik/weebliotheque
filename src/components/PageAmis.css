@@ -1,0 +1,164 @@
+.page-amis {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 640px;
+}
+
+.carte-sociale {
+  background: var(--blanc);
+  border: 1px solid var(--trait);
+  border-radius: 16px;
+  padding: 20px 24px;
+}
+
+.carte-sociale h2 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin-bottom: 14px;
+}
+
+.compteur-social {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--rose);
+  margin-left: 6px;
+}
+
+.champ-social {
+  width: 100%;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.9rem;
+  color: var(--encre);
+  background: var(--creme);
+  border: 1px solid var(--trait);
+  border-radius: 10px;
+  padding: 10px 14px;
+  outline: none;
+}
+
+.champ-social:focus {
+  border-color: var(--rose);
+}
+
+.liste-sociale {
+  list-style: none;
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.liste-sociale li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  transition: background 0.15s;
+}
+
+.liste-sociale li:hover {
+  background: var(--rose-pale);
+}
+
+.avatar.mini {
+  width: 32px;
+  height: 32px;
+  font-size: 0.8rem;
+  border-radius: 9px;
+}
+
+.pseudo-social {
+  font-weight: 500;
+  font-size: 0.9rem;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.etat-social {
+  font-size: 0.75rem;
+  color: var(--gris);
+}
+
+.btn-social {
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: var(--rose-pale);
+  color: var(--rouge);
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+
+.btn-social:hover {
+  background: var(--rouge);
+  color: #fff;
+}
+
+.btn-social.secondaire {
+  background: var(--creme);
+  color: var(--gris);
+}
+
+.btn-social.secondaire:hover {
+  background: var(--trait);
+  color: var(--encre);
+}
+
+.vide-social {
+  font-size: 0.85rem;
+  color: var(--gris);
+}
+
+/* ===== Profil d'un ami ===== */
+.btn-retour {
+  background: none;
+  border: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gris);
+  padding: 0;
+  margin-bottom: 16px;
+  transition: color 0.15s;
+}
+
+.btn-retour:hover {
+  color: var(--rouge);
+}
+
+.ami-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--blanc);
+  border: 1px solid var(--trait);
+  border-radius: 16px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+}
+
+.ami-banner .avatar {
+  width: 56px;
+  height: 56px;
+  font-size: 1.3rem;
+  border-radius: 14px;
+}
+
+.ami-banner h2 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 1.3rem;
+}
+
+.ami-depuis {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--gris);
+}

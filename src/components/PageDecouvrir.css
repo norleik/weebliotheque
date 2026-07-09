@@ -1,0 +1,62 @@
+.page-decouvrir {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.decouvrir-tete {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.decouvrir-tete h2 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+
+.saison-badge {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  background: var(--rose-pale);
+  color: var(--rouge);
+  border: 1px solid var(--rose);
+  border-radius: 99px;
+  padding: 4px 12px;
+}
+
+.decouvrir-etat {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--gris);
+  padding: 16px;
+}
+
+.decouvrir-suite {
+  display: flex;
+  justify-content: center;
+}
+
+.btn-charger-plus {
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: var(--blanc);
+  color: var(--rouge);
+  border: 1.5px solid var(--rouge);
+  border-radius: 10px;
+  padding: 10px 28px;
+  transition: all 0.15s;
+}
+
+.btn-charger-plus:hover {
+  background: var(--rouge);
+  color: #fff;
+}
+
+.oeuvre .btn-suivi:disabled {
+  background: var(--creme);
+  color: var(--gris);
+  cursor: default;
+}

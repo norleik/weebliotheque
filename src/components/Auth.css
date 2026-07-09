@@ -1,0 +1,109 @@
+.auth-ecran {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.auth-carte {
+  width: 100%;
+  max-width: 380px;
+  background: var(--blanc);
+  border: 1px solid var(--trait);
+  border-radius: 20px;
+  padding: 32px;
+}
+
+.auth-carte .logo {
+  display: block;
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.auth-onglets {
+  display: flex;
+  gap: 6px;
+  background: var(--creme);
+  border-radius: 99px;
+  padding: 4px;
+  margin-bottom: 24px;
+}
+
+.auth-onglet {
+  flex: 1;
+  border: none;
+  background: none;
+  padding: 10px;
+  border-radius: 99px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gris);
+  transition: all 0.15s;
+}
+
+.auth-onglet.actif {
+  background: var(--rouge);
+  color: #fff;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--gris);
+}
+
+form input {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  color: var(--encre);
+  background: var(--creme);
+  border: 1px solid var(--trait);
+  border-radius: 10px;
+  padding: 10px 14px;
+  outline: none;
+}
+
+form input:focus {
+  border-color: var(--rose);
+}
+
+.auth-erreur {
+  font-size: 0.8rem;
+  color: var(--rouge);
+}
+
+.auth-info {
+  font-size: 0.8rem;
+  color: var(--gris);
+}
+
+.auth-submit {
+  font-weight: 600;
+  font-size: 0.9rem;
+  background: var(--rouge);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  margin-top: 4px;
+  transition: background 0.15s;
+}
+
+.auth-submit:hover:not(:disabled) {
+  background: var(--rouge-fonce);
+}
+
+.auth-submit:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
