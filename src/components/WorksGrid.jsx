@@ -10,6 +10,13 @@ const UNITE = {
 const DEGRADES = ['cv-1', 'cv-2', 'cv-3', 'cv-4', 'cv-5', 'cv-6', 'cv-7', 'cv-8'];
 const NOTES_POSSIBLES = Array.from({ length: 10 }, (_, i) => i + 1);
 
+export const STATUTS = [
+  { id: 'pas_commence', label: 'Pas commencé' },
+  { id: 'en_cours', label: 'En cours' },
+  { id: 'termine', label: 'Terminé' },
+  { id: 'arrete', label: 'Arrêté' },
+];
+
 function Etoiles({ n }) {
   return (
     <span className="etoiles">
@@ -39,14 +46,17 @@ function NoteSelect({ note, onDefinirNote }) {
   );
 }
 
-function WorkCard({ oeuvre, lectureSeule, onIncrementer, onDefinirNote, onRetirer }) {
+function WorkCard({ oeuvre, lectureSeule, onIncrementer, onDefinirNote, onDefinirStatut, onRetirer }) {
   const { malId, titre, type, note, image, total, progression, statut, url } = oeuvre;
   const unite = UNITE[type] ?? UNITE.MANGA;
   const fini = statut === 'termine';
+  const arrete = statut === 'arrete';
   const degrade = DEGRADES[malId % DEGRADES.length];
 
+  const labelProgression = arrete ? 'Arrêté' : statut === 'pas_commence' ? 'Pas commencé' : unite.pluriel;
+
   return (
-    <article className={`oeuvre${fini ? ' fini' : ''}`}>
+    <article className={`oeuvre${fini ? ' fini' : ''}${arrete ? ' arrete' : ''}`}>
       <div
         className={`cover${!image ? ` ${degrade}` : ''}`}
         style={image ? { backgroundImage: `url(${image})` } : undefined}
@@ -68,7 +78,7 @@ function WorkCard({ oeuvre, lectureSeule, onIncrementer, onDefinirNote, onRetire
             </>
           ) : (
             <>
-              <span>{unite.pluriel}</span>
+              <span>{labelProgression}</span>
               <b>{total ? `${progression} / ${total}` : progression}</b>
             </>
           )}
@@ -87,11 +97,21 @@ function WorkCard({ oeuvre, lectureSeule, onIncrementer, onDefinirNote, onRetire
         )}
         {!lectureSeule && (
           <div className="liens-secondaires">
-            {!fini && (
-              <a className="lien-fiche" href={url} target="_blank" rel="noreferrer">
-                Voir la fiche ↗
-              </a>
-            )}
+            <a className="lien-fiche" href={url} target="_blank" rel="noreferrer" title="Voir la fiche MAL">
+              Fiche ↗
+            </a>
+            <select
+              className="statut-select"
+              value={statut}
+              onChange={(e) => onDefinirStatut(malId, e.target.value)}
+              title="Changer le statut"
+            >
+              {STATUTS.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.label}
+                </option>
+              ))}
+            </select>
             <button className="btn-retirer" onClick={() => onRetirer(malId)}>
               Retirer
             </button>
@@ -102,7 +122,14 @@ function WorkCard({ oeuvre, lectureSeule, onIncrementer, onDefinirNote, onRetire
   );
 }
 
-export default function WorksGrid({ oeuvres, lectureSeule = false, onIncrementer, onDefinirNote, onRetirer }) {
+export default function WorksGrid({
+  oeuvres,
+  lectureSeule = false,
+  onIncrementer,
+  onDefinirNote,
+  onDefinirStatut,
+  onRetirer,
+}) {
   if (oeuvres.length === 0) {
     return (
       <div className="grille-vide">
@@ -120,6 +147,7 @@ export default function WorksGrid({ oeuvres, lectureSeule = false, onIncrementer
           lectureSeule={lectureSeule}
           onIncrementer={onIncrementer}
           onDefinirNote={onDefinirNote}
+          onDefinirStatut={onDefinirStatut}
           onRetirer={onRetirer}
         />
       ))}

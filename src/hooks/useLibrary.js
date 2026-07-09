@@ -129,10 +129,13 @@ export function useLibrary(userId) {
     }
   }
 
-  async function marquerTermine(malId) {
+  async function definirStatut(malId, statut) {
     const entree = library.find((o) => o.malId === malId);
-    if (!entree) return;
-    const patch = { statut: 'termine', progression: entree.total ?? entree.progression };
+    if (!entree || entree.statut === statut) return;
+
+    const patch = { statut };
+    if (statut === 'termine') patch.progression = entree.total ?? entree.progression;
+    if (statut === 'pas_commence') patch.progression = 0;
 
     const { error } = await supabase
       .from('library_entries')
@@ -142,7 +145,8 @@ export function useLibrary(userId) {
 
     if (error) return console.error(error);
     setLibrary((lib) => lib.map((o) => (o.malId === malId ? { ...o, ...patch } : o)));
-    enregistrerActivite('termine', entree);
+    if (statut === 'termine') enregistrerActivite('termine', entree);
+    if (statut === 'arrete') enregistrerActivite('arrete', entree);
   }
 
   async function definirNote(malId, note) {
@@ -165,7 +169,7 @@ export function useLibrary(userId) {
     ajouterOeuvre,
     retirerOeuvre,
     incrementerProgression,
-    marquerTermine,
+    definirStatut,
     definirNote,
   };
 }

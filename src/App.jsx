@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Header from './components/Header';
 import PageProfil from './components/PageProfil';
 import PageAmis from './components/PageAmis';
@@ -19,6 +19,14 @@ function App() {
   const friends = useFriends(authUser?.id);
   const groups = useGroups(authUser?.id);
   const [page, setPage] = useState('profil');
+  const [theme, setTheme] = useState(() =>
+    localStorage.getItem('weebliotheque:theme') === 'sombre' ? 'sombre' : 'clair',
+  );
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme === 'sombre' ? 'dark' : 'light';
+    localStorage.setItem('weebliotheque:theme', theme);
+  }, [theme]);
 
   if (chargementAuth) return null;
   if (!authUser) return <Auth />;
@@ -54,6 +62,8 @@ function App() {
         estDansBiblio={bibliotheque.estDansBiblio}
         onAjouter={bibliotheque.ajouterOeuvre}
         onDeconnexion={deconnexion}
+        theme={theme}
+        onBasculerTheme={() => setTheme((t) => (t === 'sombre' ? 'clair' : 'sombre'))}
       />
       <div className="page">
         {page === 'profil' && (

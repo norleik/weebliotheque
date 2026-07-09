@@ -10,6 +10,20 @@
   --rouge-fonce: #a31621;
   --rose: #ffb3c1;
   --rose-pale: #fff0f3;
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  --blanc: #261d20;
+  --creme: #1a1315;
+  --trait: #3d2e32;
+  --encre: #f5ecee;
+  --gris: #a8969a;
+  --rouge: #e63946;
+  --rouge-fonce: #a31621;
+  --rose: #ffb3c1;
+  --rose-pale: #38242a;
+  color-scheme: dark;
 }
 
 * {

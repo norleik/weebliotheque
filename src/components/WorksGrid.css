@@ -76,7 +76,8 @@
   font-size: 0.75rem;
   font-weight: 700;
   font-family: 'Outfit', sans-serif;
-  background: var(--encre);
+  /* Posé sur la jaquette : reste sombre quel que soit le thème */
+  background: #231a1c;
   color: var(--rose);
   border-radius: 6px;
   padding: 4px 8px;
@@ -104,7 +105,7 @@
 }
 
 .cover .note-c.statique:hover {
-  background: var(--encre);
+  background: #231a1c;
 }
 
 .cv-1 { background: linear-gradient(135deg, #7a1e2b, #d62839); }
@@ -177,8 +178,31 @@
 .liens-secondaires {
   display: flex;
   align-items: center;
+  gap: 6px;
   justify-content: space-between;
   margin-top: 6px;
+}
+
+.statut-select {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--gris);
+  background: var(--creme);
+  border: 1px solid var(--trait);
+  border-radius: 8px;
+  padding: 3px 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.statut-select:hover {
+  border-color: var(--rose);
+  color: var(--rouge);
+}
+
+.oeuvre.arrete .cover {
+  filter: grayscale(0.55);
 }
 
 .lien-fiche {

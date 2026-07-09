@@ -24,6 +24,8 @@ export function messageActivite(activite) {
       return `a noté ${titre} ${detail}/10`;
     case 'termine':
       return `a terminé ${titre}`;
+    case 'arrete':
+      return `a arrêté ${titre}`;
     default:
       return '';
   }

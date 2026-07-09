@@ -9,7 +9,16 @@ const LIENS_NAV = [
   { id: 'calendrier', label: 'Calendrier', inactif: true },
 ];
 
-export default function Header({ initiale = 'L', pageActive, onNaviguer, estDansBiblio, onAjouter, onDeconnexion }) {
+export default function Header({
+  initiale = 'L',
+  pageActive,
+  onNaviguer,
+  estDansBiblio,
+  onAjouter,
+  onDeconnexion,
+  theme,
+  onBasculerTheme,
+}) {
   return (
     <header>
       <div className="header-in">
@@ -30,6 +39,13 @@ export default function Header({ initiale = 'L', pageActive, onNaviguer, estDans
           ))}
         </nav>
         <Recherche estDansBiblio={estDansBiblio} onAjouter={onAjouter} />
+        <button
+          className="btn-theme"
+          onClick={onBasculerTheme}
+          title={theme === 'sombre' ? 'Passer au thème clair' : 'Passer au thème sombre'}
+        >
+          {theme === 'sombre' ? '☀️' : '🌙'}
+        </button>
         <div className="avatar av-leo" title="Déconnexion" onClick={onDeconnexion}>
           {initiale}
         </div>

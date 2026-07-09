@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import LibraryTabs from './LibraryTabs';
 import WorksGrid from './WorksGrid';
+import ListesBande from './ListesBande';
 import { supabase } from '../lib/supabaseClient';
 import { onglets } from '../data/profil';
 import './PageAmis.css';
@@ -75,7 +76,13 @@ function ProfilAmi({ ami, onRetour }) {
           <span className="ami-depuis">membre depuis {depuis}</span>
         </div>
       </div>
-      <LibraryTabs onglets={ongletsAvecTotal} ongletActif={ongletActif} onChangeOnglet={setOngletActif} />
+      <ListesBande userId={ami.id} />
+      <LibraryTabs
+        onglets={ongletsAvecTotal}
+        ongletActif={ongletActif}
+        onChangeOnglet={setOngletActif}
+        titre="Sa bibliothèque"
+      />
       <WorksGrid oeuvres={oeuvresFiltrees} lectureSeule />
     </div>
   );
