@@ -100,15 +100,25 @@ export default function ListesBande({ userId, proprietaire = false, library = []
   const { listes, chargement, creerListe, supprimerListe, ajouterItem, retirerItem, deplacerItem } =
     useLists(userId);
   const [listeOuverte, setListeOuverte] = useState(null);
+  const [creation, setCreation] = useState(false);
+  const [nomListe, setNomListe] = useState('');
 
-  async function onCreer() {
-    const nom = window.prompt('Nom de la liste :', 'Top 10 animé');
-    if (!nom || !nom.trim()) return;
+  async function onCreer(e) {
+    e.preventDefault();
+    const nom = nomListe.trim().slice(0, 60);
+    if (!nom) return;
     try {
-      await creerListe(nom.trim().slice(0, 60));
+      await creerListe(nom);
+      setNomListe('');
+      setCreation(false);
     } catch (err) {
       console.error(err);
     }
+  }
+
+  function onAnnulerCreation() {
+    setCreation(false);
+    setNomListe('');
   }
 
   async function onSupprimer(listId) {
@@ -125,10 +135,30 @@ export default function ListesBande({ userId, proprietaire = false, library = []
     <section className="listes-section">
       <div className="listes-tete">
         <h2>Listes</h2>
-        {proprietaire && (
-          <button className="btn-nouvelle-liste" onClick={onCreer}>
+        {proprietaire && !creation && (
+          <button className="btn-nouvelle-liste" onClick={() => setCreation(true)}>
             + Nouvelle liste
           </button>
+        )}
+        {proprietaire && creation && (
+          <form className="form-nouvelle-liste" onSubmit={onCreer}>
+            <input
+              type="text"
+              className="champ-social"
+              placeholder="Nom de la liste (ex : Top 10 animé)"
+              maxLength={60}
+              autoFocus
+              value={nomListe}
+              onChange={(e) => setNomListe(e.target.value)}
+              onKeyDown={(e) => e.key === 'Escape' && onAnnulerCreation()}
+            />
+            <button className="btn-social" type="submit" disabled={!nomListe.trim()}>
+              Créer
+            </button>
+            <button className="btn-social secondaire" type="button" onClick={onAnnulerCreation}>
+              Annuler
+            </button>
+          </form>
         )}
       </div>
 

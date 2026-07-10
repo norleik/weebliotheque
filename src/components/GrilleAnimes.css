@@ -1,0 +1,31 @@
+.oeuvre.dossier {
+  cursor: pointer;
+  /* Effet de pile de cartes derrière le dossier */
+  box-shadow:
+    5px -5px 0 -2px var(--rose-pale),
+    10px -10px 0 -5px var(--trait);
+}
+
+.oeuvre.dossier:hover {
+  box-shadow:
+    5px -5px 0 -2px var(--rose-pale),
+    10px -10px 0 -5px var(--trait),
+    0 10px 24px rgba(214, 40, 57, 0.12);
+}
+
+.dossier-entete {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.dossier-entete .btn-retour {
+  margin-bottom: 0;
+}
+
+.dossier-titre {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+}

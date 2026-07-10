@@ -1,0 +1,23 @@
+.collection {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.collection-titre {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.collection-titre span {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  background: var(--encre);
+  color: var(--blanc);
+  border-radius: 99px;
+  padding: 5px 16px;
+}

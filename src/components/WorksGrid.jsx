@@ -46,7 +46,7 @@ function NoteSelect({ note, onDefinirNote }) {
   );
 }
 
-function WorkCard({ oeuvre, lectureSeule, onIncrementer, onDefinirNote, onDefinirStatut, onRetirer }) {
+export function WorkCard({ oeuvre, lectureSeule, onIncrementer, onDefinirNote, onDefinirStatut, onRetirer }) {
   const { malId, titre, type, note, image, total, progression, statut, url } = oeuvre;
   const unite = UNITE[type] ?? UNITE.MANGA;
   const fini = statut === 'termine';

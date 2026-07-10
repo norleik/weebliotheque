@@ -32,6 +32,20 @@
   color: #fff;
 }
 
+.form-nouvelle-liste {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  max-width: 480px;
+}
+
+.form-nouvelle-liste .champ-social {
+  flex: 1;
+  padding: 8px 14px;
+}
+
 .listes-vide {
   font-size: 0.85rem;
   color: var(--gris);
@@ -242,6 +256,7 @@
 
 .liste-ajout {
   display: flex;
+  flex-direction: row;
   gap: 10px;
   margin-top: 12px;
   border-top: 1px solid var(--trait);

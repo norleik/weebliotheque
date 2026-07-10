@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import LibraryTabs from './LibraryTabs';
 import WorksGrid from './WorksGrid';
+import GrilleAnimes from './GrilleAnimes';
+import Collection from './Collection';
 import ListesBande from './ListesBande';
 import { supabase } from '../lib/supabaseClient';
 import { onglets } from '../data/profil';
@@ -59,8 +61,9 @@ function ProfilAmi({ ami, onRetour }) {
 
   const ongletsAvecTotal = onglets.map((onglet) => ({
     ...onglet,
-    total: library.filter((o) => o.type === onglet.type).length,
+    total: onglet.type ? library.filter((o) => o.type === onglet.type).length : library.length,
   }));
+  const estCollection = ongletActif === 'collection';
   const typeActif = onglets.find((o) => o.id === ongletActif)?.type;
   const oeuvresFiltrees = library.filter((o) => o.type === typeActif);
 
@@ -83,7 +86,13 @@ function ProfilAmi({ ami, onRetour }) {
         onChangeOnglet={setOngletActif}
         titre="Sa bibliothèque"
       />
-      <WorksGrid oeuvres={oeuvresFiltrees} lectureSeule />
+      {estCollection ? (
+        <Collection oeuvres={library} lectureSeule />
+      ) : typeActif === 'ANIMÉ' ? (
+        <GrilleAnimes oeuvres={oeuvresFiltrees} lectureSeule />
+      ) : (
+        <WorksGrid oeuvres={oeuvresFiltrees} lectureSeule />
+      )}
     </div>
   );
 }
