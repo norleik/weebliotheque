@@ -7,6 +7,12 @@ const CLIENT_ID = import.meta.env.VITE_MAL_CLIENT_ID;
 const CLE_TOKENS = 'weebliotheque:mal';
 const CLE_VERIFIER = 'weebliotheque:mal:verifier';
 
+// Le chemin MAL cible est passé en paramètre de requête plutôt que dans
+// l'URL — voir le commentaire dans api/mal/proxy.js pour le pourquoi.
+function urlProxy(chemin) {
+  return `${BASE}/proxy?path=${encodeURIComponent(chemin)}`;
+}
+
 // ===== Mappers =====
 
 const TYPES_MANGA = {
@@ -54,8 +60,8 @@ export async function rechercherOeuvres(query, { signal } = {}) {
   if (q.length < 3) return []; // l'API MAL exige au moins 3 caractères
 
   const [animeRes, mangaRes] = await Promise.all([
-    fetch(`${BASE}/anime?q=${encodeURIComponent(q)}&limit=6&fields=${CHAMPS_ANIME}`, { signal }),
-    fetch(`${BASE}/manga?q=${encodeURIComponent(q)}&limit=6&fields=${CHAMPS_MANGA}`, { signal }),
+    fetch(urlProxy(`anime?q=${encodeURIComponent(q)}&limit=6&fields=${CHAMPS_ANIME}`), { signal }),
+    fetch(urlProxy(`manga?q=${encodeURIComponent(q)}&limit=6&fields=${CHAMPS_MANGA}`), { signal }),
   ]);
 
   if (!animeRes.ok || !mangaRes.ok) {
@@ -84,7 +90,9 @@ export async function sortiesSaison(page = 1) {
   const { saison, annee } = saisonCourante();
   const offset = (page - 1) * PAR_PAGE;
   const res = await fetch(
-    `${BASE}/anime/season/${annee}/${saison}?limit=${PAR_PAGE}&offset=${offset}&sort=anime_num_list_users&fields=${CHAMPS_ANIME}`,
+    urlProxy(
+      `anime/season/${annee}/${saison}?limit=${PAR_PAGE}&offset=${offset}&sort=anime_num_list_users&fields=${CHAMPS_ANIME}`,
+    ),
   );
   if (!res.ok) throw new Error('Erreur lors du chargement des sorties de la saison');
   const json = await res.json();
@@ -97,7 +105,7 @@ export async function sortiesSaison(page = 1) {
 }
 
 export async function ficheDiffusion(malId) {
-  const res = await fetch(`${BASE}/anime/${malId}?fields=broadcast,status,start_date,num_episodes`);
+  const res = await fetch(urlProxy(`anime/${malId}?fields=broadcast,status,start_date,num_episodes`));
   if (!res.ok) throw new Error(`Erreur MAL pour l'animé ${malId}`);
   const data = await res.json();
   return {
@@ -192,7 +200,7 @@ async function fetchAvecToken(chemin, dejaRetente = false) {
   const tokens = lireTokens();
   if (!tokens) throw new Error('Compte MAL non lié');
 
-  const res = await fetch(`${BASE}/${chemin}`, {
+  const res = await fetch(urlProxy(chemin), {
     headers: { Authorization: `Bearer ${tokens.access_token}` },
   });
 
