@@ -212,6 +212,77 @@ async function fetchAvecToken(chemin, dejaRetente = false) {
   return res.json();
 }
 
+async function ecrireAvecToken(chemin, params, dejaRetente = false) {
+  const tokens = lireTokens();
+  if (!tokens) return; // pas de compte lié : rien à synchroniser
+
+  const res = await fetch(urlProxy(chemin), {
+    method: 'PUT',
+    headers: { Authorization: `Bearer ${tokens.access_token}` },
+    body: params.toString(),
+  });
+
+  if (res.status === 401 && !dejaRetente) {
+    await rafraichirTokens();
+    return ecrireAvecToken(chemin, params, true);
+  }
+  if (!res.ok) {
+    const texte = await res.text().catch(() => '');
+    throw new Error(`Erreur MAL (${res.status}) sur ${chemin} : ${texte}`);
+  }
+}
+
+// ===== Synchronisation Weebliothèque → MAL =====
+
+const STATUT_VERS_MAL_ANIME = {
+  pas_commence: 'plan_to_watch',
+  en_cours: 'watching',
+  en_pause: 'on_hold',
+  termine: 'completed',
+  arrete: 'dropped',
+};
+
+const STATUT_VERS_MAL_MANGA = {
+  pas_commence: 'plan_to_read',
+  en_cours: 'reading',
+  en_pause: 'on_hold',
+  termine: 'completed',
+  arrete: 'dropped',
+};
+
+// Répercute un changement de statut/progression/note sur le compte MAL lié.
+// Silencieux (ne lance jamais) : une panne de sync MAL ne doit pas bloquer
+// une action locale sur Weebliothèque — juste loguée en cas d'échec.
+export async function synchroniserVersMAL(oeuvre, { statut, progression, note } = {}) {
+  if (!compteLie()) return;
+
+  const genre = oeuvre.type === 'ANIMÉ' ? 'anime' : 'manga';
+  const params = new URLSearchParams();
+
+  if (statut) {
+    const table = genre === 'anime' ? STATUT_VERS_MAL_ANIME : STATUT_VERS_MAL_MANGA;
+    params.set('status', table[statut] ?? 'watching');
+  }
+  if (progression != null) {
+    const champ =
+      genre === 'anime'
+        ? 'num_watched_episodes'
+        : oeuvre.type === 'LIGHT NOVEL'
+          ? 'num_volumes_read'
+          : 'num_chapters_read';
+    params.set(champ, String(progression));
+  }
+  if (note != null) params.set('score', String(note));
+
+  if ([...params.keys()].length === 0) return;
+
+  try {
+    await ecrireAvecToken(`${genre}/${oeuvre.malId}/my_list_status`, params);
+  } catch (err) {
+    console.error('Synchronisation MAL échouée :', err);
+  }
+}
+
 // ===== Import de la liste MAL de l'utilisateur =====
 
 const CHAMPS_LISTE_ANIME = 'list_status,num_episodes,media_type,main_picture,average_episode_duration';
@@ -237,7 +308,7 @@ async function listeComplete(genre, onProgres) {
 const STATUTS_ANIME = {
   watching: 'en_cours',
   completed: 'termine',
-  on_hold: 'arrete',
+  on_hold: 'en_pause',
   dropped: 'arrete',
   plan_to_watch: 'pas_commence',
 };
@@ -245,7 +316,7 @@ const STATUTS_ANIME = {
 const STATUTS_MANGA = {
   reading: 'en_cours',
   completed: 'termine',
-  on_hold: 'arrete',
+  on_hold: 'en_pause',
   dropped: 'arrete',
   plan_to_read: 'pas_commence',
 };

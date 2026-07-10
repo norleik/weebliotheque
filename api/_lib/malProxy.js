@@ -12,6 +12,10 @@ const CHEMINS_AUTORISES = [
   /^users\/@me\/(animelist|mangalist)(\?|$)/,
 ];
 
+// Chemins d'écriture (PUT) — mise à jour du statut/progression/note d'une
+// œuvre sur le compte MAL de l'utilisateur, nécessite son propre token.
+const CHEMINS_ECRITURE = [/^anime\/\d+\/my_list_status$/, /^manga\/\d+\/my_list_status$/];
+
 async function lireCorps(req) {
   if (req.body !== undefined && req.body !== null) {
     return typeof req.body === 'string' ? JSON.parse(req.body || '{}') : req.body;
@@ -50,6 +54,42 @@ export async function proxyCatalogue(req, res, chemin) {
     const reponse = await fetch(`${API_MAL}/${propre}`, { headers: entetes });
     const corps = await reponse.text();
     return repondreJson(res, reponse.status, corps);
+  } catch (err) {
+    console.error(err);
+    return repondreJson(res, 502, { error: 'MAL injoignable' });
+  }
+}
+
+// PUT /api/mal/proxy?path=<anime|manga>/<id>/my_list_status → met à jour le
+// statut/la progression/la note d'une œuvre sur le compte MAL de
+// l'utilisateur. Exige son token (jamais le Client ID de l'appli).
+export async function proxyEcriture(req, res, chemin) {
+  if (req.method !== 'PUT') {
+    return repondreJson(res, 405, { error: 'Méthode non autorisée' });
+  }
+  const propre = chemin.replace(/^\/+/, '');
+  if (!CHEMINS_ECRITURE.some((r) => r.test(propre))) {
+    return repondreJson(res, 403, { error: 'Chemin non autorisé' });
+  }
+  if (!req.headers.authorization) {
+    return repondreJson(res, 401, { error: 'Authentification requise' });
+  }
+
+  const morceaux = [];
+  for await (const morceau of req) morceaux.push(morceau);
+  const corps = Buffer.concat(morceaux).toString('utf8');
+
+  try {
+    const reponse = await fetch(`${API_MAL}/${propre}`, {
+      method: 'PUT',
+      headers: {
+        Authorization: req.headers.authorization,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: corps,
+    });
+    const texte = await reponse.text();
+    return repondreJson(res, reponse.status, texte);
   } catch (err) {
     console.error(err);
     return repondreJson(res, 502, { error: 'MAL injoignable' });

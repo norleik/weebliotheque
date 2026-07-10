@@ -205,6 +205,10 @@
   filter: grayscale(0.55);
 }
 
+.oeuvre.pause .cover {
+  filter: grayscale(0.3) brightness(0.94);
+}
+
 .lien-fiche {
   font-size: 0.7rem;
   color: var(--gris);

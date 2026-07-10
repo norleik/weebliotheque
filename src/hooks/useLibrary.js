@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
+import { synchroniserVersMAL } from '../api/mal';
 
 function depuisLigne(ligne) {
   return {
@@ -163,6 +164,7 @@ export function useLibrary(userId) {
     } else {
       enregistrerActivite('progression', entree, String(suivant));
     }
+    synchroniserVersMAL(entree, { statut: patch.statut, progression: patch.progression });
   }
 
   async function definirStatut(malId, statut) {
@@ -183,6 +185,8 @@ export function useLibrary(userId) {
     setLibrary((lib) => lib.map((o) => (o.malId === malId ? { ...o, ...patch } : o)));
     if (statut === 'termine') enregistrerActivite('termine', entree);
     if (statut === 'arrete') enregistrerActivite('arrete', entree);
+    if (statut === 'en_pause') enregistrerActivite('pause', entree);
+    synchroniserVersMAL(entree, { statut, progression: patch.progression });
   }
 
   async function definirNote(malId, note) {
@@ -195,7 +199,10 @@ export function useLibrary(userId) {
 
     if (error) return console.error(error);
     setLibrary((lib) => lib.map((o) => (o.malId === malId ? { ...o, note } : o)));
-    if (entree) enregistrerActivite('note', entree, String(note));
+    if (entree) {
+      enregistrerActivite('note', entree, String(note));
+      synchroniserVersMAL(entree, { note });
+    }
   }
 
   return {

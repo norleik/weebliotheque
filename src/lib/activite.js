@@ -26,6 +26,8 @@ export function messageActivite(activite) {
       return `a terminé ${titre}`;
     case 'arrete':
       return `a arrêté ${titre}`;
+    case 'pause':
+      return `a mis en pause ${titre}`;
     default:
       return '';
   }

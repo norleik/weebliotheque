@@ -16,13 +16,16 @@ export default defineConfig(({ mode }) => {
         name: 'mal-proxy-dev',
         configureServer(server) {
           server.middlewares.use('/api/mal', async (req, res) => {
-            const { proxyCatalogue, echangeToken } = await import('./api/_lib/malProxy.js')
+            const { proxyCatalogue, proxyEcriture, echangeToken } = await import('./api/_lib/malProxy.js')
             const url = new URL(req.url, 'http://localhost')
             if (url.pathname === '/token') {
               return echangeToken(req, res)
             }
             if (url.pathname === '/proxy') {
               const chemin = url.searchParams.get('path') ?? ''
+              if (req.method === 'PUT') {
+                return proxyEcriture(req, res, chemin)
+              }
               return proxyCatalogue(req, res, chemin)
             }
             res.statusCode = 404

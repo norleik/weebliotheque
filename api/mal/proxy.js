@@ -1,4 +1,4 @@
-import { proxyCatalogue } from '../_lib/malProxy.js';
+import { proxyCatalogue, proxyEcriture } from '../_lib/malProxy.js';
 
 // Le chemin cible MAL est passé en paramètre de requête (?path=…) plutôt que
 // dans l'URL elle-même : les routes catch-all Vercel à plusieurs segments
@@ -9,5 +9,8 @@ import { proxyCatalogue } from '../_lib/malProxy.js';
 export default async function handler(req, res) {
   const url = new URL(req.url, 'http://localhost');
   const chemin = url.searchParams.get('path') ?? '';
+  if (req.method === 'PUT') {
+    return proxyEcriture(req, res, chemin);
+  }
   return proxyCatalogue(req, res, chemin);
 }

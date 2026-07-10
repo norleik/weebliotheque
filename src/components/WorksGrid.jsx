@@ -13,6 +13,7 @@ const NOTES_POSSIBLES = Array.from({ length: 10 }, (_, i) => i + 1);
 export const STATUTS = [
   { id: 'pas_commence', label: 'Pas commencé' },
   { id: 'en_cours', label: 'En cours' },
+  { id: 'en_pause', label: 'En pause' },
   { id: 'termine', label: 'Terminé' },
   { id: 'arrete', label: 'Arrêté' },
 ];
@@ -51,12 +52,19 @@ export function WorkCard({ oeuvre, lectureSeule, onIncrementer, onDefinirNote, o
   const unite = UNITE[type] ?? UNITE.MANGA;
   const fini = statut === 'termine';
   const arrete = statut === 'arrete';
+  const enPause = statut === 'en_pause';
   const degrade = DEGRADES[malId % DEGRADES.length];
 
-  const labelProgression = arrete ? 'Arrêté' : statut === 'pas_commence' ? 'Pas commencé' : unite.pluriel;
+  const labelProgression = arrete
+    ? 'Arrêté'
+    : enPause
+      ? 'En pause'
+      : statut === 'pas_commence'
+        ? 'Pas commencé'
+        : unite.pluriel;
 
   return (
-    <article className={`oeuvre${fini ? ' fini' : ''}${arrete ? ' arrete' : ''}`}>
+    <article className={`oeuvre${fini ? ' fini' : ''}${arrete ? ' arrete' : ''}${enPause ? ' pause' : ''}`}>
       <div
         className={`cover${!image ? ` ${degrade}` : ''}`}
         style={image ? { backgroundImage: `url(${image})` } : undefined}
