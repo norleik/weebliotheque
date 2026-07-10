@@ -155,7 +155,16 @@ async function appelToken(corps) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(corps),
   });
-  if (!res.ok) throw new Error("Échange de jetons MAL refusé");
+  if (!res.ok) {
+    let detail = '';
+    try {
+      const erreur = await res.json();
+      detail = erreur.message || erreur.error || '';
+    } catch {
+      /* corps non JSON */
+    }
+    throw new Error(detail ? `MAL : ${detail}` : 'Échange de jetons MAL refusé');
+  }
   const tokens = await res.json();
   localStorage.setItem(CLE_TOKENS, JSON.stringify({ ...tokens, obtenu: Date.now() }));
   return tokens;

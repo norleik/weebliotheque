@@ -13,6 +13,7 @@ export default function ImportMAL({ onImporter }) {
   const [etat, setEtat] = useState(null); // null | 'liaison' | 'import' | 'fait' | 'erreur'
   const [progres, setProgres] = useState(0);
   const [resultat, setResultat] = useState(0);
+  const [erreurDetail, setErreurDetail] = useState('');
   const echangeFait = useRef(false);
 
   // Retour de la redirection OAuth MAL (?code=…&state=liaison-mal).
@@ -30,6 +31,7 @@ export default function ImportMAL({ onImporter }) {
       })
       .catch((err) => {
         console.error(err);
+        setErreurDetail(err.message);
         setEtat('erreur');
       })
       .finally(() => {
@@ -47,6 +49,7 @@ export default function ImportMAL({ onImporter }) {
       setEtat('fait');
     } catch (err) {
       console.error(err);
+      setErreurDetail(err.message);
       setEtat('erreur');
     }
   }
@@ -104,7 +107,8 @@ export default function ImportMAL({ onImporter }) {
       {etat === 'erreur' && (
         <>
           <span className="import-mal-texte erreur">
-            Un problème est survenu — réessaie, ou délie puis relie ton compte.
+            Un problème est survenu{erreurDetail ? ` (${erreurDetail})` : ''} — réessaie, ou délie
+            puis relie ton compte.
           </span>
           <button className="btn-social secondaire" onClick={() => setEtat(null)}>
             OK
