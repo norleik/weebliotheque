@@ -14,7 +14,7 @@ export function useFriends(userId) {
     const { data, error } = await supabase
       .from('friendships')
       .select(
-        'id, demandeur, destinataire, statut, created_at, profil_demandeur:profiles!demandeur(id, pseudo), profil_destinataire:profiles!destinataire(id, pseudo)',
+        'id, demandeur, destinataire, statut, created_at, profil_demandeur:profiles!demandeur(id, pseudo, avatar), profil_destinataire:profiles!destinataire(id, pseudo, avatar)',
       )
       .or(`demandeur.eq.${userId},destinataire.eq.${userId}`);
 
@@ -51,7 +51,7 @@ export function useFriends(userId) {
     if (!q) return [];
     const { data, error } = await supabase
       .from('profiles')
-      .select('id, pseudo')
+      .select('id, pseudo, avatar')
       .ilike('pseudo', `%${q}%`)
       .neq('id', userId)
       .limit(10);

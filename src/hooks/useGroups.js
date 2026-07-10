@@ -57,7 +57,7 @@ export function useGroups(userId) {
   async function chargerDetails(groupId) {
     const { data: membres, error: erreurMembres } = await supabase
       .from('group_members')
-      .select('user_id, joined_at, profiles(id, pseudo)')
+      .select('user_id, joined_at, profiles(id, pseudo, avatar)')
       .eq('group_id', groupId);
 
     if (erreurMembres) {
@@ -69,14 +69,14 @@ export function useGroups(userId) {
     const [{ data: fil, error: erreurFil }, { data: messages, error: erreurMessages }] = await Promise.all([
       supabase
         .from('activity')
-        .select('id, user_id, action, mal_id, titre, type, detail, created_at, profiles(pseudo)')
+        .select('id, user_id, action, mal_id, titre, type, detail, created_at, profiles(pseudo, avatar)')
         .in('user_id', ids)
         .order('created_at', { ascending: false })
         .limit(50),
       supabase
         .from('group_messages')
         .select(
-          'id, user_id, contenu, created_at, profiles(pseudo), activity:activity_id(id, action, titre, type, detail, profiles(pseudo))',
+          'id, user_id, contenu, created_at, profiles(pseudo, avatar), activity:activity_id(id, action, titre, type, detail, profiles(pseudo))',
         )
         .eq('group_id', groupId)
         .order('created_at', { ascending: false })
@@ -87,7 +87,11 @@ export function useGroups(userId) {
     if (erreurMessages) console.error(erreurMessages);
 
     return {
-      membres: (membres ?? []).map((m) => ({ id: m.user_id, pseudo: m.profiles?.pseudo ?? '?' })),
+      membres: (membres ?? []).map((m) => ({
+        id: m.user_id,
+        pseudo: m.profiles?.pseudo ?? '?',
+        avatar: m.profiles?.avatar ?? null,
+      })),
       fil: fil ?? [],
       messages: messages ?? [],
     };

@@ -26,3 +26,22 @@
 .import-mal-texte.erreur {
   color: var(--rouge);
 }
+
+.import-mal-lien {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--rouge);
+  flex: 1;
+  min-width: 160px;
+}
+
+.import-mal-lien:hover {
+  text-decoration: underline;
+}
+
+.import-mal-sync {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--gris);
+  white-space: nowrap;
+}

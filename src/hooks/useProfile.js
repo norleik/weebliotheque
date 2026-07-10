@@ -34,5 +34,30 @@ export function useProfile(userId) {
     setProfile((p) => ({ ...p, pseudo }));
   }
 
-  return { profile, renommer };
+  async function uploaderAvatar(fichier) {
+    if (!userId) return;
+    if (!fichier.type.startsWith('image/')) {
+      throw new Error('Le fichier doit être une image.');
+    }
+    if (fichier.size > 5 * 1024 * 1024) {
+      throw new Error('Image trop lourde (5 Mo max).');
+    }
+
+    const extension = fichier.name.split('.').pop() || 'jpg';
+    const chemin = `${userId}/avatar.${extension}`;
+
+    const { error: erreurUpload } = await supabase.storage
+      .from('avatars')
+      .upload(chemin, fichier, { upsert: true, cacheControl: '3600' });
+    if (erreurUpload) throw erreurUpload;
+
+    const { data } = supabase.storage.from('avatars').getPublicUrl(chemin);
+    const url = `${data.publicUrl}?t=${Date.now()}`;
+
+    const { error } = await supabase.from('profiles').update({ avatar: url }).eq('id', userId);
+    if (error) throw error;
+    setProfile((p) => ({ ...p, avatar: url }));
+  }
+
+  return { profile, renommer, uploaderAvatar };
 }

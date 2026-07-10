@@ -4,6 +4,7 @@ import WorksGrid from './WorksGrid';
 import GrilleAnimes from './GrilleAnimes';
 import Collection from './Collection';
 import ListesBande from './ListesBande';
+import Avatar from './Avatar';
 import { supabase } from '../lib/supabaseClient';
 import { onglets } from '../data/profil';
 import './PageAmis.css';
@@ -18,7 +19,7 @@ function ProfilAmi({ ami, onRetour }) {
 
     supabase
       .from('profiles')
-      .select('id, pseudo, created_at')
+      .select('id, pseudo, avatar, created_at')
       .eq('id', ami.id)
       .single()
       .then(({ data, error }) => {
@@ -73,7 +74,7 @@ function ProfilAmi({ ami, onRetour }) {
         ← Retour aux amis
       </button>
       <div className="ami-banner">
-        <div className="avatar av-leo">{ami.pseudo?.[0]?.toUpperCase() ?? '?'}</div>
+        <Avatar url={profil?.avatar} pseudo={ami.pseudo} />
         <div>
           <h2>{ami.pseudo}</h2>
           <span className="ami-depuis">membre depuis {depuis}</span>
@@ -145,7 +146,7 @@ export default function PageAmis({ friends }) {
               const statut = statutRelation(u.id);
               return (
                 <li key={u.id}>
-                  <div className="avatar av-leo mini">{u.pseudo?.[0]?.toUpperCase() ?? '?'}</div>
+                  <Avatar url={u.avatar} pseudo={u.pseudo} className="mini" />
                   <span className="pseudo-social">{u.pseudo}</span>
                   {statut === 'ami' && <span className="etat-social">Déjà ami ✓</span>}
                   {statut === 'envoyee' && <span className="etat-social">Demande envoyée</span>}
@@ -169,7 +170,7 @@ export default function PageAmis({ friends }) {
           <ul className="liste-sociale">
             {demandesRecues.map((d) => (
               <li key={d.friendshipId}>
-                <div className="avatar av-leo mini">{d.pseudo?.[0]?.toUpperCase() ?? '?'}</div>
+                <Avatar url={d.avatar} pseudo={d.pseudo} className="mini" />
                 <span className="pseudo-social">{d.pseudo}</span>
                 <button className="btn-social" onClick={() => accepterDemande(d.friendshipId)}>
                   Accepter
@@ -189,7 +190,7 @@ export default function PageAmis({ friends }) {
           <ul className="liste-sociale">
             {demandesEnvoyees.map((d) => (
               <li key={d.friendshipId}>
-                <div className="avatar av-leo mini">{d.pseudo?.[0]?.toUpperCase() ?? '?'}</div>
+                <Avatar url={d.avatar} pseudo={d.pseudo} className="mini" />
                 <span className="pseudo-social">{d.pseudo}</span>
                 <span className="etat-social">En attente…</span>
                 <button className="btn-social secondaire" onClick={() => retirerRelation(d.friendshipId)}>
@@ -211,7 +212,7 @@ export default function PageAmis({ friends }) {
           <ul className="liste-sociale">
             {amis.map((a) => (
               <li key={a.friendshipId}>
-                <div className="avatar av-leo mini">{a.pseudo?.[0]?.toUpperCase() ?? '?'}</div>
+                <Avatar url={a.avatar} pseudo={a.pseudo} className="mini" />
                 <span className="pseudo-social">{a.pseudo}</span>
                 <button className="btn-social" onClick={() => setAmiSelectionne(a)}>
                   Voir le profil

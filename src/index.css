@@ -64,6 +64,11 @@ button {
   background: linear-gradient(135deg, var(--rouge), var(--rouge-fonce));
 }
 
+.avatar-photo {
+  object-fit: cover;
+  display: block;
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     transition: none !important;

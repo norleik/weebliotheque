@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { tempsRelatif, messageActivite } from '../lib/activite';
+import Avatar from './Avatar';
 import './PageGroupes.css';
 
 function Pseudo({ pseudo, estMoi }) {
@@ -103,7 +104,7 @@ function DetailGroupe({ groupe, moi, chargerDetails, quitterGroupe, envoyerMessa
             {elements.map((el) =>
               el.genre === 'activite' ? (
                 <li key={el.cle} className="fil-item">
-                  <div className="avatar av-leo mini">{el.a.profiles?.pseudo?.[0]?.toUpperCase() ?? '?'}</div>
+                  <Avatar url={el.a.profiles?.avatar} pseudo={el.a.profiles?.pseudo} className="mini" />
                   <div className="fil-texte">
                     <span>
                       <Pseudo pseudo={el.a.profiles?.pseudo} estMoi={el.a.user_id === moi} /> {messageActivite(el.a)}
@@ -116,7 +117,7 @@ function DetailGroupe({ groupe, moi, chargerDetails, quitterGroupe, envoyerMessa
                 </li>
               ) : (
                 <li key={el.cle} className="fil-item est-message">
-                  <div className="avatar av-leo mini">{el.m.profiles?.pseudo?.[0]?.toUpperCase() ?? '?'}</div>
+                  <Avatar url={el.m.profiles?.avatar} pseudo={el.m.profiles?.pseudo} className="mini" />
                   <div className="fil-texte">
                     <span>
                       <Pseudo pseudo={el.m.profiles?.pseudo} estMoi={el.m.user_id === moi} />
@@ -168,7 +169,7 @@ function DetailGroupe({ groupe, moi, chargerDetails, quitterGroupe, envoyerMessa
           <ul className="liste-sociale">
             {membres.map((m) => (
               <li key={m.id}>
-                <div className="avatar av-leo mini">{m.pseudo?.[0]?.toUpperCase() ?? '?'}</div>
+                <Avatar url={m.avatar} pseudo={m.pseudo} className="mini" />
                 <span className="pseudo-social">
                   {m.pseudo}
                   {m.id === moi && ' (toi)'}

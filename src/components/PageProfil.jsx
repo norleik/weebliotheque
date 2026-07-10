@@ -10,7 +10,7 @@ import Collection from './Collection';
 import { useStats } from '../hooks/useStats';
 import { onglets } from '../data/profil';
 
-export default function PageProfil({ userId, utilisateur, onModifier, bibliotheque }) {
+export default function PageProfil({ userId, utilisateur, onModifier, onUploaderAvatar, bibliotheque }) {
   const [ongletActif, setOngletActif] = useState(onglets[0].id);
   const [filtreStatut, setFiltreStatut] = useState('tous');
   const { library, incrementerProgression, definirNote, definirStatut, retirerOeuvre, importerOeuvres } =
@@ -37,7 +37,7 @@ export default function PageProfil({ userId, utilisateur, onModifier, bibliotheq
 
   return (
     <>
-      <ProfileBanner utilisateur={utilisateur} onModifier={onModifier} />
+      <ProfileBanner utilisateur={utilisateur} onModifier={onModifier} onUploaderAvatar={onUploaderAvatar} />
       <ImportMAL onImporter={importerOeuvres} />
       <StatsGrid stats={stats} />
       <ListesBande userId={userId} proprietaire library={library} />

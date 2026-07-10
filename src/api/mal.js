@@ -6,6 +6,8 @@ const BASE = '/api/mal';
 const CLIENT_ID = import.meta.env.VITE_MAL_CLIENT_ID;
 const CLE_TOKENS = 'weebliotheque:mal';
 const CLE_VERIFIER = 'weebliotheque:mal:verifier';
+const CLE_PROFIL_MAL = 'weebliotheque:mal:profil';
+const CLE_DERNIERE_SYNC = 'weebliotheque:mal:derniere';
 
 // Le chemin MAL cible est passé en paramètre de requête plutôt que dans
 // l'URL — voir le commentaire dans api/mal/proxy.js pour le pourquoi.
@@ -134,6 +136,30 @@ export function compteLie() {
 
 export function delierCompte() {
   localStorage.removeItem(CLE_TOKENS);
+  localStorage.removeItem(CLE_PROFIL_MAL);
+  localStorage.removeItem(CLE_DERNIERE_SYNC);
+}
+
+// Pseudo + lien du compte MAL lié, mis en cache (rarement amené à changer).
+export async function profilMAL() {
+  if (!compteLie()) return null;
+  const cache = JSON.parse(localStorage.getItem(CLE_PROFIL_MAL) ?? 'null');
+  if (cache) return cache;
+
+  try {
+    const data = await fetchAvecToken('users/@me?fields=name');
+    const profil = { pseudo: data.name, url: `https://myanimelist.net/profile/${data.name}` };
+    localStorage.setItem(CLE_PROFIL_MAL, JSON.stringify(profil));
+    return profil;
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+}
+
+export function derniereSynchro() {
+  const v = localStorage.getItem(CLE_DERNIERE_SYNC);
+  return v ? new Date(Number(v)) : null;
 }
 
 function redirectUri() {
@@ -230,6 +256,7 @@ async function ecrireAvecToken(chemin, params, dejaRetente = false) {
     const texte = await res.text().catch(() => '');
     throw new Error(`Erreur MAL (${res.status}) sur ${chemin} : ${texte}`);
   }
+  localStorage.setItem(CLE_DERNIERE_SYNC, String(Date.now()));
 }
 
 // ===== Synchronisation Weebliothèque → MAL =====

@@ -5,7 +5,10 @@ import {
   demarrerLiaison,
   terminerLiaison,
   importerListeMAL,
+  profilMAL,
+  derniereSynchro,
 } from '../api/mal';
+import { tempsRelatif } from '../lib/activite';
 import './ImportMAL.css';
 
 export default function ImportMAL({ onImporter }) {
@@ -14,6 +17,7 @@ export default function ImportMAL({ onImporter }) {
   const [progres, setProgres] = useState(0);
   const [resultat, setResultat] = useState(0);
   const [erreurDetail, setErreurDetail] = useState('');
+  const [malProfil, setMalProfil] = useState(null);
   const echangeFait = useRef(false);
 
   // Retour de la redirection OAuth MAL (?code=…&state=liaison-mal).
@@ -39,6 +43,21 @@ export default function ImportMAL({ onImporter }) {
       });
   }, []);
 
+  // Pseudo MAL affiché une fois lié (nouvelle liaison ou compte déjà lié au chargement).
+  useEffect(() => {
+    if (!lie) {
+      setMalProfil(null);
+      return;
+    }
+    let annule = false;
+    profilMAL().then((p) => {
+      if (!annule) setMalProfil(p);
+    });
+    return () => {
+      annule = true;
+    };
+  }, [lie]);
+
   async function onImport() {
     setEtat('import');
     setProgres(0);
@@ -60,6 +79,8 @@ export default function ImportMAL({ onImporter }) {
     setEtat(null);
   }
 
+  const derniere = lie ? derniereSynchro() : null;
+
   return (
     <section className="import-mal">
       <span className="import-mal-titre">🔗 Compte MyAnimeList</span>
@@ -79,7 +100,16 @@ export default function ImportMAL({ onImporter }) {
 
       {lie && etat === null && (
         <>
-          <span className="import-mal-texte">Compte lié ✓</span>
+          {malProfil ? (
+            <a className="import-mal-lien" href={malProfil.url} target="_blank" rel="noreferrer">
+              {malProfil.pseudo} sur MyAnimeList ↗
+            </a>
+          ) : (
+            <span className="import-mal-texte">Compte lié ✓</span>
+          )}
+          {derniere && (
+            <span className="import-mal-sync">Synchronisé {tempsRelatif(derniere.toISOString())}</span>
+          )}
           <button className="btn-social" onClick={onImport}>
             Importer ma liste MAL
           </button>

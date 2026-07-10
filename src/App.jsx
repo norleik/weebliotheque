@@ -15,7 +15,7 @@ import './App.css';
 
 function App() {
   const { utilisateur: authUser, chargement: chargementAuth, deconnexion } = useAuth();
-  const { profile, renommer } = useProfile(authUser?.id);
+  const { profile, renommer, uploaderAvatar } = useProfile(authUser?.id);
   const bibliotheque = useLibrary(authUser?.id);
   const friends = useFriends(authUser?.id);
   const groups = useGroups(authUser?.id);
@@ -43,6 +43,7 @@ function App() {
     pseudo: `@${nomAffiche}`,
     depuis,
     initiale: nomAffiche[0]?.toUpperCase() ?? '?',
+    avatarUrl: profile?.avatar ?? null,
     badges: [
       `👥 ${friends.amis.length} ami${friends.amis.length > 1 ? 's' : ''}`,
       `🏠 ${groups.groupes.length} groupe${groups.groupes.length > 1 ? 's' : ''}`,
@@ -58,6 +59,7 @@ function App() {
     <>
       <Header
         initiale={utilisateurAffiche.initiale}
+        avatarUrl={utilisateurAffiche.avatarUrl}
         pageActive={page}
         onNaviguer={setPage}
         estDansBiblio={bibliotheque.estDansBiblio}
@@ -72,6 +74,7 @@ function App() {
             userId={authUser.id}
             utilisateur={utilisateurAffiche}
             onModifier={onModifierProfil}
+            onUploaderAvatar={uploaderAvatar}
             bibliotheque={bibliotheque}
           />
         )}

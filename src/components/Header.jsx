@@ -1,4 +1,5 @@
 import Recherche from './Recherche';
+import Avatar from './Avatar';
 import './Header.css';
 
 const LIENS_NAV = [
@@ -11,6 +12,7 @@ const LIENS_NAV = [
 
 export default function Header({
   initiale = 'L',
+  avatarUrl,
   pageActive,
   onNaviguer,
   estDansBiblio,
@@ -46,9 +48,7 @@ export default function Header({
         >
           {theme === 'sombre' ? '☀️' : '🌙'}
         </button>
-        <div className="avatar av-leo" title="Déconnexion" onClick={onDeconnexion}>
-          {initiale}
-        </div>
+        <Avatar url={avatarUrl} pseudo={initiale} title="Déconnexion" onClick={onDeconnexion} />
       </div>
     </header>
   );
