@@ -4,6 +4,7 @@ import PageProfil from './components/PageProfil';
 import PageAmis from './components/PageAmis';
 import PageGroupes from './components/PageGroupes';
 import PageDecouvrir from './components/PageDecouvrir';
+import PageCalendrier from './components/PageCalendrier';
 import Auth from './components/Auth';
 import { useAuth } from './hooks/useAuth';
 import { useProfile } from './hooks/useProfile';
@@ -79,6 +80,7 @@ function App() {
         {page === 'decouvrir' && (
           <PageDecouvrir estDansBiblio={bibliotheque.estDansBiblio} onAjouter={bibliotheque.ajouterOeuvre} />
         )}
+        {page === 'calendrier' && <PageCalendrier library={bibliotheque.library} />}
       </div>
       <div className="badge-maquette">REACT · SUPABASE</div>
     </>

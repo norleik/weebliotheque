@@ -60,6 +60,20 @@ export async function rechercherOeuvres(query, { signal } = {}) {
   return [...animes, ...mangas];
 }
 
+// Infos de diffusion d'un animé (pour le calendrier).
+export async function ficheDiffusion(malId) {
+  const res = await fetch(`${BASE_URL}/anime/${malId}`);
+  if (!res.ok) throw new Error(`Erreur Jikan pour l'animé ${malId}`);
+  const { data } = await res.json();
+  return {
+    airing: data?.airing ?? false,
+    day: data?.broadcast?.day ?? null,
+    time: data?.broadcast?.time ?? null,
+    from: data?.aired?.from ?? null,
+    total: data?.episodes ?? null,
+  };
+}
+
 const SAISONS_FR = { winter: 'Hiver', spring: 'Printemps', summer: 'Été', fall: 'Automne' };
 
 export async function sortiesSaison(page = 1) {

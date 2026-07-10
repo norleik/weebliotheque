@@ -6,7 +6,7 @@ const LIENS_NAV = [
   { id: 'amis', label: 'Amis' },
   { id: 'groupes', label: 'Groupes' },
   { id: 'decouvrir', label: 'Découvrir' },
-  { id: 'calendrier', label: 'Calendrier', inactif: true },
+  { id: 'calendrier', label: 'Calendrier' },
 ];
 
 export default function Header({

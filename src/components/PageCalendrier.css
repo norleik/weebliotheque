@@ -1,0 +1,165 @@
+.page-calendrier {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.calendrier-tete {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+
+.calendrier-tete h2 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+
+.calendrier-sous {
+  font-size: 0.82rem;
+  color: var(--gris);
+}
+
+.jour-titre {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.jour-titre span {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  background: var(--encre);
+  color: var(--blanc);
+  border-radius: 99px;
+  padding: 5px 16px;
+}
+
+.diffusions {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.diffusion {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--blanc);
+  border: 1px solid var(--trait);
+  border-radius: 14px;
+  padding: 12px 18px 12px 12px;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.diffusion:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(214, 40, 57, 0.1);
+}
+
+.diffusion img {
+  width: 56px;
+  height: 76px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.diffusion-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.diffusion-pill {
+  align-self: flex-start;
+  max-width: 100%;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--rouge);
+  background: var(--rose-pale);
+  border: 1px solid var(--rose);
+  border-radius: 99px;
+  padding: 3px 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+
+.diffusion-pill:hover {
+  background: var(--rouge);
+  border-color: var(--rouge);
+  color: #fff;
+}
+
+.diffusion-episode {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.diffusion-episode em {
+  font-style: normal;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--gris);
+}
+
+.diffusion-progression {
+  font-size: 0.75rem;
+  color: var(--gris);
+}
+
+.diffusion-quand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.diffusion-quand b {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 1.35rem;
+  color: var(--rouge);
+  letter-spacing: -0.02em;
+}
+
+.diffusion-quand span {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gris);
+}
+
+.calendrier-etat {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--gris);
+  padding: 10px;
+}
+
+.calendrier-vide {
+  background: var(--blanc);
+  border: 1px dashed var(--trait);
+  border-radius: 16px;
+  padding: 32px 20px;
+  text-align: center;
+  color: var(--gris);
+  font-size: 0.9rem;
+}
