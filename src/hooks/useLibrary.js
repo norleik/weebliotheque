@@ -94,6 +94,42 @@ export function useLibrary(userId) {
     enregistrerActivite('ajout', oeuvre);
   }
 
+  // Import en masse (liste MAL) : n'écrase jamais une entrée existante et ne
+  // publie pas d'activité (pour ne pas inonder le fil des groupes).
+  async function importerOeuvres(oeuvres) {
+    if (!userId || !oeuvres.length) return 0;
+
+    const lignes = oeuvres.map((o) => ({
+      user_id: userId,
+      mal_id: o.malId,
+      type: o.type,
+      titre: o.titre,
+      image: o.image,
+      total: o.total,
+      url: o.url,
+      duree_episode: o.dureeEpisode ?? null,
+      progression: o.progression ?? 0,
+      note: o.note ?? null,
+      statut: o.statut ?? 'en_cours',
+    }));
+
+    const { error } = await supabase
+      .from('library_entries')
+      .upsert(lignes, { onConflict: 'user_id,mal_id', ignoreDuplicates: true });
+    if (error) {
+      console.error(error);
+      throw error;
+    }
+
+    const { data } = await supabase
+      .from('library_entries')
+      .select('*')
+      .eq('user_id', userId)
+      .order('date_ajout', { ascending: true });
+    setLibrary((data ?? []).map(depuisLigne));
+    return oeuvres.length;
+  }
+
   async function retirerOeuvre(malId) {
     if (!userId) return;
     const { error } = await supabase
@@ -167,6 +203,7 @@ export function useLibrary(userId) {
     chargement,
     estDansBiblio,
     ajouterOeuvre,
+    importerOeuvres,
     retirerOeuvre,
     incrementerProgression,
     definirStatut,

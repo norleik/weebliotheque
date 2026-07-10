@@ -4,7 +4,8 @@ Tracker d'animés, mangas, light novels et manhwas à partager entre amis — un
 
 ## Fonctionnalités
 
-- 🔍 **Recherche** via l'API [Jikan](https://jikan.moe) (données MyAnimeList, sans clé d'API)
+- 🔍 **Recherche** via l'API officielle [MyAnimeList](https://myanimelist.net/apiconfig/references/api/v2) (proxy serverless dans `api/`)
+- 🔗 **Liaison de compte MAL** : import de sa liste d'animés et mangas existante (OAuth2 PKCE)
 - 📚 **Bibliothèque personnelle** : progression épisode par épisode, notes sur 10, statuts en cours/terminé
 - 📊 **Stats de profil** calculées en direct : épisodes vus, temps de visionnage, chapitres lus, note moyenne
 - 👥 **Amis** : demandes, profils consultables avec bibliothèque en lecture seule
@@ -15,7 +16,7 @@ Tracker d'animés, mangas, light novels et manhwas à partager entre amis — un
 
 - [React](https://react.dev) + [Vite](https://vite.dev)
 - [Supabase](https://supabase.com) — authentification et base de données (PostgreSQL + RLS)
-- [Jikan v4](https://docs.api.jikan.moe) — catalogue MyAnimeList
+- [API MyAnimeList v2](https://myanimelist.net/apiconfig/references/api/v2) — catalogue et import de listes, via un proxy serverless Vercel (`api/mal/`) car l'API MAL n'accepte pas les appels navigateur ; en dev, le même proxy est monté en middleware Vite
 
 ## Lancer en local
 
@@ -34,4 +35,6 @@ npm run dev
 
 ## Déploiement
 
-Build statique classique (`npm run build` → `dist/`). Sur Vercel/Netlify, définir les deux variables d'environnement `VITE_SUPABASE_URL` et `VITE_SUPABASE_ANON_KEY` dans le dashboard.
+SPA Vite + fonctions serverless (`api/`) sur Vercel. Variables d'environnement à définir dans le dashboard :
+`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `MAL_CLIENT_ID`, `MAL_CLIENT_SECRET`, `VITE_MAL_CLIENT_ID`.
+L'app MAL (myanimelist.net/apiconfig) doit déclarer les Redirect URLs `https://<domaine>/` et `http://localhost:5173/`.

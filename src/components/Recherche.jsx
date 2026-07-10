@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { rechercherOeuvres } from '../api/jikan';
+import { rechercherOeuvres } from '../api/mal';
 import './Recherche.css';
 
 export default function Recherche({ estDansBiblio, onAjouter }) {
@@ -11,7 +11,8 @@ export default function Recherche({ estDansBiblio, onAjouter }) {
   const controllerRef = useRef(null);
 
   useEffect(() => {
-    if (!requete.trim()) {
+    if (requete.trim().length < 3) {
+      // L'API MAL exige au moins 3 caractères.
       setResultats([]);
       setErreur(null);
       return;
@@ -53,9 +54,10 @@ export default function Recherche({ estDansBiblio, onAjouter }) {
 
       {ouvert && requete.trim() && (
         <div className="recherche-resultats">
+          {requete.trim().length < 3 && <div className="recherche-etat">Au moins 3 caractères…</div>}
           {chargement && <div className="recherche-etat">Recherche…</div>}
           {erreur && <div className="recherche-etat">{erreur}</div>}
-          {!chargement && !erreur && resultats.length === 0 && (
+          {!chargement && !erreur && requete.trim().length >= 3 && resultats.length === 0 && (
             <div className="recherche-etat">Aucun résultat</div>
           )}
           {resultats.map((oeuvre) => {

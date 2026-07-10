@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import ProfileBanner from './ProfileBanner';
+import ImportMAL from './ImportMAL';
 import StatsGrid from './StatsGrid';
 import ListesBande from './ListesBande';
 import LibraryTabs from './LibraryTabs';
@@ -12,7 +13,8 @@ import { onglets } from '../data/profil';
 export default function PageProfil({ userId, utilisateur, onModifier, bibliotheque }) {
   const [ongletActif, setOngletActif] = useState(onglets[0].id);
   const [filtreStatut, setFiltreStatut] = useState('tous');
-  const { library, incrementerProgression, definirNote, definirStatut, retirerOeuvre } = bibliotheque;
+  const { library, incrementerProgression, definirNote, definirStatut, retirerOeuvre, importerOeuvres } =
+    bibliotheque;
   const stats = useStats(userId, library);
 
   const ongletsAvecTotal = onglets.map((onglet) => ({
@@ -36,6 +38,7 @@ export default function PageProfil({ userId, utilisateur, onModifier, bibliotheq
   return (
     <>
       <ProfileBanner utilisateur={utilisateur} onModifier={onModifier} />
+      <ImportMAL onImporter={importerOeuvres} />
       <StatsGrid stats={stats} />
       <ListesBande userId={userId} proprietaire library={library} />
       <LibraryTabs

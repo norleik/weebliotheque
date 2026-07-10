@@ -1,4 +1,4 @@
-import { ficheDiffusion } from '../api/jikan';
+import { ficheDiffusion } from '../api/mal';
 
 const CLE_CACHE = 'weebliotheque:calendrier';
 const TTL = 12 * 3600e3; // les infos de diffusion bougent peu : 12 h de cache

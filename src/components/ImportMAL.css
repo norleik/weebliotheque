@@ -1,0 +1,28 @@
+.import-mal {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  background: var(--blanc);
+  border: 1px solid var(--trait);
+  border-radius: 14px;
+  padding: 12px 18px;
+  margin-bottom: 28px;
+}
+
+.import-mal-titre {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.import-mal-texte {
+  font-size: 0.82rem;
+  color: var(--gris);
+  flex: 1;
+  min-width: 200px;
+}
+
+.import-mal-texte.erreur {
+  color: var(--rouge);
+}

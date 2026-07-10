@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { sortiesSaison } from '../api/jikan';
+import { sortiesSaison } from '../api/mal';
 import './PageDecouvrir.css';
 
 export default function PageDecouvrir({ estDansBiblio, onAjouter }) {
