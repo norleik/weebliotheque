@@ -175,6 +175,58 @@
   color: var(--gris);
 }
 
+.oeuvre .btn-suivi:disabled {
+  background: var(--creme);
+  color: var(--gris);
+  cursor: default;
+}
+
+.oeuvre .btn-suivi:disabled:hover {
+  background: var(--creme);
+  color: var(--gris);
+}
+
+.ligne-progression {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+}
+
+.ligne-progression .btn-suivi {
+  flex: 1;
+  min-width: 0;
+}
+
+.btn-mini {
+  flex-shrink: 0;
+  width: 30px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: var(--creme);
+  color: var(--gris);
+  border: 1px solid var(--trait);
+  border-radius: 8px;
+  transition: all 0.15s;
+}
+
+.btn-mini:hover:not(:disabled) {
+  border-color: var(--rouge);
+  color: var(--rouge);
+  background: var(--rose-pale);
+}
+
+.btn-mini:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.btn-tout {
+  width: auto;
+  padding: 0 8px;
+  font-size: 0.68rem;
+  white-space: nowrap;
+}
+
 .liens-secondaires {
   display: flex;
   align-items: center;

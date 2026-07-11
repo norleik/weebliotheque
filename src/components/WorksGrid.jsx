@@ -47,21 +47,32 @@ function NoteSelect({ note, onDefinirNote }) {
   );
 }
 
-export function WorkCard({ oeuvre, lectureSeule, onIncrementer, onDefinirNote, onDefinirStatut, onRetirer }) {
-  const { malId, titre, type, note, image, total, progression, statut, url } = oeuvre;
+export function WorkCard({
+  oeuvre,
+  lectureSeule,
+  onIncrementer,
+  onDecrementer,
+  onToutMarquer,
+  onDefinirNote,
+  onDefinirStatut,
+  onRetirer,
+}) {
+  const { malId, titre, type, note, image, total, progression, statut, url, pasEncoreSorti } = oeuvre;
   const unite = UNITE[type] ?? UNITE.MANGA;
   const fini = statut === 'termine';
   const arrete = statut === 'arrete';
   const enPause = statut === 'en_pause';
   const degrade = DEGRADES[malId % DEGRADES.length];
 
-  const labelProgression = arrete
-    ? 'Arrêté'
-    : enPause
-      ? 'En pause'
-      : statut === 'pas_commence'
-        ? 'Pas commencé'
-        : unite.pluriel;
+  const labelProgression = pasEncoreSorti
+    ? 'Pas encore diffusé'
+    : arrete
+      ? 'Arrêté'
+      : enPause
+        ? 'En pause'
+        : statut === 'pas_commence'
+          ? 'Pas commencé'
+          : unite.pluriel;
 
   return (
     <article className={`oeuvre${fini ? ' fini' : ''}${arrete ? ' arrete' : ''}${enPause ? ' pause' : ''}`}>
@@ -98,10 +109,33 @@ export function WorkCard({ oeuvre, lectureSeule, onIncrementer, onDefinirNote, o
           <a className="btn-suivi" href={url} target="_blank" rel="noreferrer">
             {fini ? 'Revoir la fiche' : 'Voir la fiche'}
           </a>
-        ) : (
-          <button className="btn-suivi" onClick={() => onIncrementer(malId)}>
-            {unite.singulier} {progression + 1} {unite.verbe} ✓
+        ) : pasEncoreSorti ? (
+          <button className="btn-suivi" disabled title="Pas encore diffusé sur MAL">
+            Pas encore diffusé
           </button>
+        ) : (
+          <div className="ligne-progression">
+            <button
+              className="btn-mini"
+              onClick={() => onDecrementer(malId)}
+              disabled={progression === 0}
+              title="Retirer un épisode vu"
+            >
+              −
+            </button>
+            <button className="btn-suivi" onClick={() => onIncrementer(malId)}>
+              {unite.singulier} {progression + 1} {unite.verbe} ✓
+            </button>
+            {total > 0 && (
+              <button
+                className="btn-mini btn-tout"
+                onClick={() => onToutMarquer(malId)}
+                title={`Marquer tous les ${unite.pluriel.toLowerCase()} comme ${unite.verbe}s`}
+              >
+                Tout ✓
+              </button>
+            )}
+          </div>
         )}
         {!lectureSeule && (
           <div className="liens-secondaires">
@@ -134,6 +168,8 @@ export default function WorksGrid({
   oeuvres,
   lectureSeule = false,
   onIncrementer,
+  onDecrementer,
+  onToutMarquer,
   onDefinirNote,
   onDefinirStatut,
   onRetirer,
@@ -154,6 +190,8 @@ export default function WorksGrid({
           oeuvre={oeuvre}
           lectureSeule={lectureSeule}
           onIncrementer={onIncrementer}
+          onDecrementer={onDecrementer}
+          onToutMarquer={onToutMarquer}
           onDefinirNote={onDefinirNote}
           onDefinirStatut={onDefinirStatut}
           onRetirer={onRetirer}

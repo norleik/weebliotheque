@@ -36,6 +36,7 @@ function mapAnime(node) {
       ? Math.round(node.average_episode_duration / 60)
       : null,
     score: node.mean ?? null,
+    pasEncoreSorti: node.status === 'not_yet_aired',
   };
 }
 
@@ -54,7 +55,7 @@ function mapManga(node) {
 
 // ===== Catalogue (recherche, saison, diffusion) =====
 
-const CHAMPS_ANIME = 'main_picture,num_episodes,media_type,mean,average_episode_duration';
+const CHAMPS_ANIME = 'main_picture,num_episodes,media_type,mean,average_episode_duration,status';
 const CHAMPS_MANGA = 'main_picture,num_chapters,num_volumes,media_type,mean';
 
 export async function rechercherOeuvres(query, { signal } = {}) {
@@ -296,6 +297,26 @@ async function ecrireAvecToken(chemin, params, dejaRetente = false) {
   localStorage.setItem(CLE_DERNIERE_SYNC, String(Date.now()));
 }
 
+async function supprimerAvecToken(chemin, dejaRetente = false) {
+  const tokens = lireTokens();
+  if (!tokens) return; // pas de compte lié : rien à supprimer
+
+  const res = await fetch(urlProxy(chemin), {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${tokens.access_token}` },
+  });
+
+  if (res.status === 401 && !dejaRetente) {
+    await rafraichirTokens();
+    return supprimerAvecToken(chemin, true);
+  }
+  // 404 : déjà absente de la liste MAL — rien à faire, ce n'est pas une erreur.
+  if (!res.ok && res.status !== 404) {
+    const texte = await res.text().catch(() => '');
+    throw new Error(`Erreur MAL (${res.status}) sur ${chemin} : ${texte}`);
+  }
+}
+
 // ===== Synchronisation Weebliothèque → MAL =====
 
 const STATUT_VERS_MAL_ANIME = {
@@ -347,9 +368,22 @@ export async function synchroniserVersMAL(oeuvre, { statut, progression, note } 
   }
 }
 
+// Retire une œuvre de la liste MAL liée, en miroir d'une suppression locale.
+// Silencieux comme synchroniserVersMAL : une panne ne doit pas bloquer la
+// suppression locale, juste être loguée.
+export async function supprimerDeMAL(oeuvre) {
+  if (!compteLie()) return;
+  const genre = oeuvre.type === 'ANIMÉ' ? 'anime' : 'manga';
+  try {
+    await supprimerAvecToken(`${genre}/${oeuvre.malId}/my_list_status`);
+  } catch (err) {
+    console.error('Suppression MAL échouée :', err);
+  }
+}
+
 // ===== Import de la liste MAL de l'utilisateur =====
 
-const CHAMPS_LISTE_ANIME = 'list_status,num_episodes,media_type,main_picture,average_episode_duration';
+const CHAMPS_LISTE_ANIME = 'list_status,num_episodes,media_type,main_picture,average_episode_duration,status';
 const CHAMPS_LISTE_MANGA = 'list_status,num_chapters,num_volumes,media_type,main_picture';
 
 async function listeComplete(genre, onProgres) {

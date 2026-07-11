@@ -14,8 +14,16 @@ import { onglets } from '../data/profil';
 export default function PageProfil({ userId, utilisateur, onModifier, onUploaderAvatar, bibliotheque }) {
   const [ongletActif, setOngletActif] = useState(onglets[0].id);
   const [filtreStatut, setFiltreStatut] = useState('tous');
-  const { library, incrementerProgression, definirNote, definirStatut, retirerOeuvre, importerOeuvres } =
-    bibliotheque;
+  const {
+    library,
+    incrementerProgression,
+    decrementerProgression,
+    toutMarquer,
+    definirNote,
+    definirStatut,
+    retirerOeuvre,
+    importerOeuvres,
+  } = bibliotheque;
   const stats = useStats(userId, library);
 
   const ongletsAvecTotal = onglets.map((onglet) => ({
@@ -31,6 +39,8 @@ export default function PageProfil({ userId, utilisateur, onModifier, onUploader
 
   const handlers = {
     onIncrementer: incrementerProgression,
+    onDecrementer: decrementerProgression,
+    onToutMarquer: toutMarquer,
     onDefinirNote: definirNote,
     onDefinirStatut: definirStatut,
     onRetirer: retirerOeuvre,

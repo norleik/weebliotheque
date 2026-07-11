@@ -62,9 +62,10 @@ export async function proxyCatalogue(req, res, chemin) {
 
 // PUT /api/mal/proxy?path=<anime|manga>/<id>/my_list_status → met à jour le
 // statut/la progression/la note d'une œuvre sur le compte MAL de
-// l'utilisateur. Exige son token (jamais le Client ID de l'appli).
+// l'utilisateur. DELETE sur le même chemin → retire l'œuvre de sa liste MAL.
+// Exige son token (jamais le Client ID de l'appli).
 export async function proxyEcriture(req, res, chemin) {
-  if (req.method !== 'PUT') {
+  if (req.method !== 'PUT' && req.method !== 'DELETE') {
     return repondreJson(res, 405, { error: 'Méthode non autorisée' });
   }
   const propre = chemin.replace(/^\/+/, '');
@@ -73,6 +74,20 @@ export async function proxyEcriture(req, res, chemin) {
   }
   if (!req.headers.authorization) {
     return repondreJson(res, 401, { error: 'Authentification requise' });
+  }
+
+  if (req.method === 'DELETE') {
+    try {
+      const reponse = await fetch(`${API_MAL}/${propre}`, {
+        method: 'DELETE',
+        headers: { Authorization: req.headers.authorization },
+      });
+      const texte = await reponse.text();
+      return repondreJson(res, reponse.status, texte);
+    } catch (err) {
+      console.error(err);
+      return repondreJson(res, 502, { error: 'MAL injoignable' });
+    }
   }
 
   const morceaux = [];

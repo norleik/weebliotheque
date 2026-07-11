@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
-import { synchroniserVersMAL } from '../api/mal';
+import { synchroniserVersMAL, supprimerDeMAL } from '../api/mal';
 
 function depuisLigne(ligne) {
   return {
@@ -15,6 +15,7 @@ function depuisLigne(ligne) {
     note: ligne.note,
     statut: ligne.statut,
     dateAjout: ligne.date_ajout,
+    pasEncoreSorti: ligne.pas_encore_sorti,
   };
 }
 
@@ -83,6 +84,7 @@ export function useLibrary(userId) {
         total: oeuvre.total,
         url: oeuvre.url,
         duree_episode: oeuvre.dureeEpisode ?? null,
+        pas_encore_sorti: oeuvre.pasEncoreSorti ?? false,
       })
       .select()
       .single();
@@ -112,6 +114,7 @@ export function useLibrary(userId) {
       progression: o.progression ?? 0,
       note: o.note ?? null,
       statut: o.statut ?? 'en_cours',
+      pas_encore_sorti: o.pasEncoreSorti ?? false,
     }));
 
     const { error } = await supabase
@@ -133,6 +136,7 @@ export function useLibrary(userId) {
 
   async function retirerOeuvre(malId) {
     if (!userId) return;
+    const entree = library.find((o) => o.malId === malId);
     const { error } = await supabase
       .from('library_entries')
       .delete()
@@ -141,11 +145,12 @@ export function useLibrary(userId) {
 
     if (error) return console.error(error);
     setLibrary((lib) => lib.filter((o) => o.malId !== malId));
+    if (entree) supprimerDeMAL(entree);
   }
 
   async function incrementerProgression(malId) {
     const entree = library.find((o) => o.malId === malId);
-    if (!entree || entree.statut === 'termine') return;
+    if (!entree || entree.statut === 'termine' || entree.pasEncoreSorti) return;
 
     const suivant = (entree.progression || 0) + 1;
     const termine = entree.total ? suivant >= entree.total : false;
@@ -164,6 +169,45 @@ export function useLibrary(userId) {
     } else {
       enregistrerActivite('progression', entree, String(suivant));
     }
+    synchroniserVersMAL(entree, { statut: patch.statut, progression: patch.progression });
+  }
+
+  // Retire un épisode/chapitre marqué vu par erreur — repasse en cours si
+  // l'œuvre avait été marquée terminée.
+  async function decrementerProgression(malId) {
+    const entree = library.find((o) => o.malId === malId);
+    if (!entree || (entree.progression || 0) <= 0) return;
+
+    const patch = { progression: entree.progression - 1 };
+    if (entree.statut === 'termine') patch.statut = 'en_cours';
+
+    const { error } = await supabase
+      .from('library_entries')
+      .update(patch)
+      .eq('user_id', userId)
+      .eq('mal_id', malId);
+
+    if (error) return console.error(error);
+    setLibrary((lib) => lib.map((o) => (o.malId === malId ? { ...o, ...patch } : o)));
+    synchroniserVersMAL(entree, { statut: patch.statut ?? entree.statut, progression: patch.progression });
+  }
+
+  // Marque en une fois tous les épisodes/chapitres comme vus (nécessite un
+  // total connu — inutile pour une œuvre en cours de diffusion sans total).
+  async function toutMarquer(malId) {
+    const entree = library.find((o) => o.malId === malId);
+    if (!entree || !entree.total || entree.statut === 'termine' || entree.pasEncoreSorti) return;
+
+    const patch = { progression: entree.total, statut: 'termine' };
+    const { error } = await supabase
+      .from('library_entries')
+      .update(patch)
+      .eq('user_id', userId)
+      .eq('mal_id', malId);
+
+    if (error) return console.error(error);
+    setLibrary((lib) => lib.map((o) => (o.malId === malId ? { ...o, ...patch } : o)));
+    enregistrerActivite('termine', entree);
     synchroniserVersMAL(entree, { statut: patch.statut, progression: patch.progression });
   }
 
@@ -213,6 +257,8 @@ export function useLibrary(userId) {
     importerOeuvres,
     retirerOeuvre,
     incrementerProgression,
+    decrementerProgression,
+    toutMarquer,
     definirStatut,
     definirNote,
   };

@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
             }
             if (url.pathname === '/proxy') {
               const chemin = url.searchParams.get('path') ?? ''
-              if (req.method === 'PUT') {
+              if (req.method === 'PUT' || req.method === 'DELETE') {
                 return proxyEcriture(req, res, chemin)
               }
               return proxyCatalogue(req, res, chemin)
