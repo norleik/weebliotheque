@@ -144,20 +144,6 @@ export async function detailsAnimeJeu(malId) {
   };
 }
 
-export async function ficheDiffusion(malId) {
-  const res = await fetch(urlProxy(`anime/${malId}?fields=broadcast,status,start_date,num_episodes`));
-  if (!res.ok) throw new Error(`Erreur MAL pour l'animé ${malId}`);
-  const data = await res.json();
-  return {
-    airing: data.status === 'currently_airing',
-    // MAL renvoie "monday" (singulier) — le calendrier attend le pluriel façon Jikan.
-    day: data.broadcast?.day_of_the_week ? `${data.broadcast.day_of_the_week}s` : null,
-    time: data.broadcast?.start_time ?? null,
-    from: data.start_date ?? null,
-    total: data.num_episodes || null,
-  };
-}
-
 // ===== Liaison de compte (OAuth2 PKCE "plain") =====
 
 function lireTokens() {

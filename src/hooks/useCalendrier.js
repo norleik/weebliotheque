@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { infoDiffusion, occurrences } from '../lib/calendrier';
+import { planningAvecCache, occurrences } from '../lib/calendrier';
 
-// Récupère (progressivement) les prochaines diffusions des animés suivis.
+// Récupère (en un lot) les prochaines diffusions des animés suivis.
 export function useCalendrier(library) {
   const [evenements, setEvenements] = useState([]);
   const [chargement, setChargement] = useState(true);
@@ -19,22 +19,22 @@ export function useCalendrier(library) {
 
     let annule = false;
     setChargement(true);
-    setEvenements([]);
 
-    (async () => {
-      const tous = [];
-      for (const oeuvre of suivis) {
-        try {
-          const info = await infoDiffusion(oeuvre.malId);
-          if (annule) return;
-          tous.push(...occurrences(oeuvre, info));
-          setEvenements([...tous]);
-        } catch (err) {
-          console.error(err);
+    planningAvecCache(suivis.map((o) => o.malId))
+      .then((planning) => {
+        if (annule) return;
+        const tous = [];
+        for (const oeuvre of suivis) {
+          const info = planning.get(oeuvre.malId);
+          if (info) tous.push(...occurrences(oeuvre, info));
         }
-      }
-      if (!annule) setChargement(false);
-    })();
+        setEvenements(tous);
+        setChargement(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        if (!annule) setChargement(false);
+      });
 
     return () => {
       annule = true;
