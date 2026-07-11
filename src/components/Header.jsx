@@ -48,7 +48,15 @@ export default function Header({
         >
           {theme === 'sombre' ? '☀️' : '🌙'}
         </button>
-        <Avatar url={avatarUrl} pseudo={initiale} title="Déconnexion" onClick={onDeconnexion} />
+        <Avatar
+          url={avatarUrl}
+          pseudo={initiale}
+          title="Mon profil"
+          onClick={() => onNaviguer('profil')}
+        />
+        <button className="btn-deconnexion" onClick={onDeconnexion} title="Se déconnecter">
+          🚪
+        </button>
       </div>
     </header>
   );

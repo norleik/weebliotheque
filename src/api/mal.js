@@ -125,6 +125,24 @@ export async function sortiesSaison(page = 1) {
   };
 }
 
+// Détails utilisés pour comparer deux animés dans le mini-jeu "Anime du jour"
+// (studio, année, épisodes, genres) — champs non couverts par mapAnime().
+export async function detailsAnimeJeu(malId) {
+  const champs = 'title,main_picture,num_episodes,start_season,genres,studios';
+  const res = await fetch(urlProxy(`anime/${malId}?fields=${champs}`));
+  if (!res.ok) throw new Error(`Erreur MAL pour l'animé ${malId}`);
+  const data = await res.json();
+  return {
+    malId: data.id,
+    titre: data.title,
+    image: data.main_picture?.medium ?? null,
+    episodes: data.num_episodes || null,
+    annee: data.start_season?.year ?? null,
+    genres: (data.genres ?? []).map((g) => g.name),
+    studios: (data.studios ?? []).map((s) => s.name),
+  };
+}
+
 export async function ficheDiffusion(malId) {
   const res = await fetch(urlProxy(`anime/${malId}?fields=broadcast,status,start_date,num_episodes`));
   if (!res.ok) throw new Error(`Erreur MAL pour l'animé ${malId}`);
