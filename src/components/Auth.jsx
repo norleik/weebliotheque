@@ -3,13 +3,14 @@ import { useAuth } from '../hooks/useAuth';
 import './Auth.css';
 
 export default function Auth() {
-  const { connexion, inscription } = useAuth();
+  const { connexion, inscription, connexionOAuth } = useAuth();
   const [mode, setMode] = useState('connexion');
   const [email, setEmail] = useState('');
   const [motDePasse, setMotDePasse] = useState('');
   const [erreur, setErreur] = useState(null);
   const [info, setInfo] = useState(null);
   const [envoi, setEnvoi] = useState(false);
+  const [envoiOAuth, setEnvoiOAuth] = useState(null); // null | 'google' | 'discord'
 
   async function onSubmit(e) {
     e.preventDefault();
@@ -30,6 +31,18 @@ export default function Auth() {
     }
   }
 
+  async function onOAuth(provider) {
+    setErreur(null);
+    setEnvoiOAuth(provider);
+    try {
+      await connexionOAuth(provider);
+      // La page va être redirigée par Supabase — pas besoin de remettre envoiOAuth à null.
+    } catch (err) {
+      setErreur(err.message);
+      setEnvoiOAuth(null);
+    }
+  }
+
   return (
     <div className="auth-ecran">
       <div className="auth-carte">
@@ -37,6 +50,35 @@ export default function Auth() {
           <span className="w">Weeb</span>liothèque
           <span className="logo-kata">ウィーブ・図書館</span>
         </a>
+
+        <div className="auth-oauth">
+          <button
+            type="button"
+            className="btn-oauth btn-oauth-google"
+            onClick={() => onOAuth('google')}
+            disabled={envoiOAuth !== null}
+          >
+            <span className="oauth-icone" aria-hidden="true">
+              G
+            </span>
+            {envoiOAuth === 'google' ? 'Redirection…' : 'Continuer avec Google'}
+          </button>
+          <button
+            type="button"
+            className="btn-oauth btn-oauth-discord"
+            onClick={() => onOAuth('discord')}
+            disabled={envoiOAuth !== null}
+          >
+            <span className="oauth-icone" aria-hidden="true">
+              D
+            </span>
+            {envoiOAuth === 'discord' ? 'Redirection…' : 'Continuer avec Discord'}
+          </button>
+        </div>
+
+        <div className="auth-separateur">
+          <span>ou</span>
+        </div>
 
         <div className="auth-onglets">
           <button

@@ -30,12 +30,23 @@ export function AuthProvider({ children }) {
     await supabase.auth.signOut();
   }
 
+  // provider: 'google' | 'discord' — redirige vers le fournisseur, puis revient
+  // sur le site avec la session déjà active (Supabase gère tout l'échange).
+  async function connexionOAuth(provider) {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider,
+      options: { redirectTo: window.location.origin },
+    });
+    if (error) throw error;
+  }
+
   const valeur = {
     session,
     utilisateur: session?.user ?? null,
     chargement: session === undefined,
     inscription,
     connexion,
+    connexionOAuth,
     deconnexion,
   };
 

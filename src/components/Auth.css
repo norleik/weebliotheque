@@ -21,6 +21,77 @@
   margin-bottom: 28px;
 }
 
+.auth-oauth {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.btn-oauth {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  font-size: 0.88rem;
+  border-radius: 10px;
+  padding: 11px;
+  border: 1.5px solid var(--trait);
+  background: var(--blanc);
+  color: var(--encre);
+  transition: all 0.15s;
+}
+
+.btn-oauth:hover:not(:disabled) {
+  border-color: var(--rose);
+  background: var(--rose-pale);
+}
+
+.btn-oauth:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.oauth-icone {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 0.7rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.btn-oauth-google .oauth-icone {
+  background: linear-gradient(135deg, #4285f4, #34a853 50%, #fbbc05 75%, #ea4335);
+}
+
+.btn-oauth-discord .oauth-icone {
+  background: #5865f2;
+}
+
+.auth-separateur {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  color: var(--gris);
+  font-size: 0.75rem;
+}
+
+.auth-separateur::before,
+.auth-separateur::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--trait);
+}
+
 .auth-onglets {
   display: flex;
   gap: 6px;
