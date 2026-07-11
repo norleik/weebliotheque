@@ -31,14 +31,17 @@ function parseLigneCsv(ligne) {
   return champs;
 }
 
-// TV Time propose plusieurs exports CSV différents. On en reconnaît deux :
-// - "subscriptions" (colonnes tv_show_name/active/archived…) : séries suivies
-//   et leurs réglages de notification — ne garantit pas que la série ait été
-//   vraiment regardée.
-// - "show_seen_episode_latest" (colonnes episode_id/tv_show_name/tv_show_id…) :
+// TV Time propose plusieurs exports CSV différents (via la demande RGPD, qui
+// livre un gros dossier de fichiers). On en reconnaît trois, du moins au plus
+// précis :
+// - "abonnements" (tv_show_name/active/archived…) : séries suivies et leurs
+//   réglages de notification — ne garantit pas que la série ait été regardée.
+// - "episodes_vus" (episode_id/tv_show_name/tv_show_id…, sans active/archived) :
 //   le dernier épisode vu par série — garantit qu'au moins un épisode a été vu,
-//   mais ne donne ni le numéro de cet épisode ni le total vu.
-// Aucun des deux ne fournit de compteur d'épisodes exploitable tel quel.
+//   mais sans numéro d'épisode ni total.
+// - "progression" (nb_episodes_seen/tv_show_name…, fichier user_tv_show_data) :
+//   le nombre total d'épisodes vus par série, déjà calculé par TV Time — le
+//   plus utile, à privilégier si l'utilisateur le trouve dans son export.
 export function parserCsvTvTime(texte) {
   const lignes = texte.split(/\r?\n/).filter((l) => l.trim().length > 0);
   if (lignes.length < 2) return { format: null, lignes: [] };
@@ -49,9 +52,12 @@ export function parserCsvTvTime(texte) {
     throw new Error('Colonne "tv_show_name" introuvable — ce fichier ne semble pas venir de TV Time.');
   }
 
+  const idxProgression = entetes.indexOf('nb_episodes_seen');
   const idxActif = entetes.indexOf('active');
   const idxArchive = entetes.indexOf('archived');
-  const format = idxActif !== -1 || idxArchive !== -1 ? 'abonnements' : 'episodes_vus';
+
+  const format =
+    idxProgression !== -1 ? 'progression' : idxActif !== -1 || idxArchive !== -1 ? 'abonnements' : 'episodes_vus';
 
   const parLigne = lignes
     .slice(1)
@@ -61,12 +67,13 @@ export function parserCsvTvTime(texte) {
         nom: champs[idxNom]?.trim() ?? '',
         actif: idxActif !== -1 && champs[idxActif]?.trim() === '1',
         archive: idxArchive !== -1 && champs[idxArchive]?.trim() === '1',
+        progression: idxProgression !== -1 ? Number(champs[idxProgression]) || 0 : null,
       };
     })
     .filter((r) => r.nom);
 
-  // "show_seen_episode_latest" ne devrait avoir qu'une ligne par série, mais on
-  // déduplique par sécurité (garde la première occurrence rencontrée).
+  // Une ligne par série attendue dans les trois formats, on déduplique par
+  // sécurité (garde la première occurrence rencontrée).
   const parTitre = new Map();
   for (const l of parLigne) {
     if (!parTitre.has(l.nom)) parTitre.set(l.nom, l);
@@ -81,11 +88,18 @@ export function nettoyerTitreRecherche(nom) {
   return nom.replace(/\s*\(\d{4}\)\s*$/, '').trim();
 }
 
-// Statut Weebliothèque par défaut déduit du fichier TV Time — approximatif,
-// aucun des deux formats ne fournit de vrai statut de progression.
+// Statut par défaut pour les formats "abonnements"/"episodes_vus", qui ne
+// donnent pas de vrai nombre d'épisodes.
 export function statutParDefaut({ actif, archive }, format) {
   if (format === 'episodes_vus') return 'en_cours'; // au moins un épisode vu, c'est confirmé
   if (actif) return 'en_cours';
   if (archive) return 'arrete';
   return 'pas_commence';
+}
+
+// Pour le format "progression" : statut déduit en comparant le nombre
+// d'épisodes vus au total de l'œuvre MAL choisie (si connu).
+export function statutDepuisProgression(progressionVue, total) {
+  if (total && progressionVue >= total) return 'termine';
+  return 'en_cours';
 }

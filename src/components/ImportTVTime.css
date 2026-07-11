@@ -67,10 +67,17 @@
 .import-tvtime-nom {
   font-size: 0.85rem;
   font-weight: 500;
-  flex: 0 0 200px;
+  flex: 0 0 220px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.import-tvtime-progression {
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  font-size: 0.72rem;
+  color: var(--rouge);
 }
 
 .import-tvtime-liste select {

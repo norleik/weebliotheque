@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { rechercherAnime } from '../api/mal';
-import { parserCsvTvTime, nettoyerTitreRecherche, statutParDefaut } from '../lib/tvtime';
+import { parserCsvTvTime, nettoyerTitreRecherche, statutParDefaut, statutDepuisProgression } from '../lib/tvtime';
 import './ImportTVTime.css';
 
 export default function ImportTVTime({ onImporter }) {
@@ -66,6 +66,11 @@ export default function ImportTVTime({ onImporter }) {
       .filter((l) => l.inclure && l.choisi)
       .map((l) => {
         const oeuvre = l.resultats.find((r) => String(r.malId) === String(l.choisi));
+        if (format === 'progression') {
+          const vue = l.progression ?? 0;
+          const progression = oeuvre.total ? Math.min(vue, oeuvre.total) : vue;
+          return { ...oeuvre, progression, note: null, statut: statutDepuisProgression(vue, oeuvre.total) };
+        }
         return { ...oeuvre, progression: 0, note: null, statut: statutParDefaut(l, format) };
       });
 
@@ -90,11 +95,10 @@ export default function ImportTVTime({ onImporter }) {
       {etape === 'choix' && (
         <>
           <p className="import-tvtime-aide">
-            Exporte tes données depuis TV Time, puis choisis un des fichiers CSV reçus :{' '}
-            <code>subscriptions</code> (séries suivies) ou{' '}
-            <code>show_seen_episode_latest</code> (séries dont au moins un épisode a été vu — plus
-            fiable). Aucun des deux ne donne le nombre exact d'épisodes vus : seuls les titres et
-            un statut approximatif seront importés, à toi d'ajuster la progression ensuite.
+            Exporte tes données depuis TV Time (RGPD), puis choisis un des fichiers CSV reçus. Le
+            plus complet est <code>user_tv_show_data</code> (nombre réel d'épisodes vus par série) —
+            sinon <code>show_seen_episode_latest</code> ou <code>subscriptions</code> fonctionnent
+            aussi mais sans progression exacte, juste un statut approximatif.
           </p>
           <label className="btn-social btn-fichier">
             Choisir le fichier CSV
@@ -112,9 +116,12 @@ export default function ImportTVTime({ onImporter }) {
       {etape === 'revue' && (
         <>
           <p className="import-tvtime-aide">
-            Fichier « {format === 'episodes_vus' ? 'épisodes vus' : 'abonnements'} » — {nbTrouves} /{' '}
-            {lignes.length} titres reconnus sur MyAnimeList. Vérifie les correspondances, décoche
-            celles à ignorer, puis confirme.
+            Fichier «{' '}
+            {format === 'progression' ? 'progression' : format === 'episodes_vus' ? 'épisodes vus' : 'abonnements'}{' '}
+            » — {nbTrouves} / {lignes.length} titres reconnus sur MyAnimeList. Vérifie les
+            correspondances (et le nombre d'épisodes pour les séries à plusieurs saisons — TV Time
+            additionne parfois toutes les saisons dans un seul total), décoche celles à ignorer,
+            puis confirme.
           </p>
           <ul className="import-tvtime-liste">
             {lignes.map((l, i) => (
@@ -125,7 +132,12 @@ export default function ImportTVTime({ onImporter }) {
                   disabled={l.resultats.length === 0}
                   onChange={() => onToggleInclure(i)}
                 />
-                <span className="import-tvtime-nom">{l.nom}</span>
+                <span className="import-tvtime-nom">
+                  {l.nom}
+                  {format === 'progression' && (
+                    <b className="import-tvtime-progression"> · {l.progression} ép.</b>
+                  )}
+                </span>
                 {l.resultats.length > 0 ? (
                   <select value={l.choisi} onChange={(e) => onChangerChoix(i, e.target.value)}>
                     {l.resultats.map((r) => (
