@@ -3,7 +3,7 @@ import { supabase } from '../lib/supabaseClient';
 import { detailsAnimeJeu } from '../api/mal';
 import { idAnimeDuJour, cléJour } from '../data/animeDuJourPool';
 
-export const ESSAIS_MAX = 5;
+export const ESSAIS_MAX = 6;
 
 function comparerValeur(cible, valeur, écartProche) {
   if (valeur == null || cible == null) return { etat: 'inconnu' };

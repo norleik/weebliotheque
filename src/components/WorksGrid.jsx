@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import './WorksGrid.css';
 
 const UNITE = {
@@ -63,6 +64,7 @@ export function WorkCard({
   const arrete = statut === 'arrete';
   const enPause = statut === 'en_pause';
   const degrade = DEGRADES[malId % DEGRADES.length];
+  const [etendue, setEtendue] = useState(false);
 
   const labelProgression = pasEncoreSorti
     ? 'Pas encore diffusé'
@@ -75,10 +77,13 @@ export function WorkCard({
           : unite.pluriel;
 
   return (
-    <article className={`oeuvre${fini ? ' fini' : ''}${arrete ? ' arrete' : ''}${enPause ? ' pause' : ''}`}>
+    <article
+      className={`oeuvre${fini ? ' fini' : ''}${arrete ? ' arrete' : ''}${enPause ? ' pause' : ''}${etendue ? ' etendue' : ''}`}
+    >
       <div
         className={`cover${!image ? ` ${degrade}` : ''}`}
         style={image ? { backgroundImage: `url(${image})` } : undefined}
+        onClick={() => setEtendue((e) => !e)}
       >
         <span className="type">{type}</span>
         {lectureSeule ? (
@@ -87,6 +92,7 @@ export function WorkCard({
           <NoteSelect note={note} onDefinirNote={(v) => onDefinirNote(malId, v)} />
         )}
         <h3>{titre}</h3>
+        <span className="chevron-etendre">{etendue ? '⌃' : '⌄'}</span>
       </div>
       <div className="oeuvre-corps">
         <div className="prog-lab">

@@ -67,9 +67,9 @@ export function useGroups(userId) {
 
     const ids = (membres ?? []).map((m) => m.user_id);
     // Les notifications d'activité (ajout, épisode vu…) ne remontent que sur les
-    // 7 derniers jours pour ne pas transformer le fil en liste sans fin — les
+    // 5 derniers jours pour ne pas transformer le fil en liste sans fin — les
     // messages de chat, eux, ne sont pas concernés.
-    const seuilActivite = new Date(Date.now() - 7 * 86400e3).toISOString();
+    const seuilActivite = new Date(Date.now() - 5 * 86400e3).toISOString();
     const [{ data: fil, error: erreurFil }, { data: messages, error: erreurMessages }] = await Promise.all([
       supabase
         .from('activity')

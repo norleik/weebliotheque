@@ -320,3 +320,46 @@
 .etoiles .off {
   color: var(--trait);
 }
+
+.chevron-etendre {
+  display: none;
+}
+
+/* Cartes compactes sur mobile : seuls l'image et le titre restent visibles
+   par défaut, le reste (badge, note, progression, boutons) n'apparaît qu'au
+   tap sur la jaquette — plus facile à parcourir avec beaucoup d'œuvres. */
+@media (max-width: 800px) {
+  .oeuvre-corps {
+    display: none;
+  }
+
+  .oeuvre.etendue .oeuvre-corps {
+    display: block;
+  }
+
+  .cover {
+    cursor: pointer;
+  }
+
+  .cover .type,
+  .cover .note-c {
+    display: none;
+  }
+
+  .oeuvre.etendue .cover .type,
+  .oeuvre.etendue .cover .note-c {
+    display: block;
+  }
+
+  .chevron-etendre {
+    display: block;
+    position: absolute;
+    bottom: 8px;
+    right: 10px;
+    z-index: 1;
+    color: #fff;
+    font-size: 1.1rem;
+    line-height: 1;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  }
+}
