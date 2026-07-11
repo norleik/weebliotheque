@@ -31,23 +31,29 @@ function parseLigneCsv(ligne) {
   return champs;
 }
 
-// Extrait { nom, actif, archive } de l'export "subscriptions" de TV Time
-// (colonnes : tv_show_name, ..., archived, ..., active — pas de progression
-// épisode par épisode dans ce fichier, juste la liste des séries suivies).
+// TV Time propose plusieurs exports CSV différents. On en reconnaît deux :
+// - "subscriptions" (colonnes tv_show_name/active/archived…) : séries suivies
+//   et leurs réglages de notification — ne garantit pas que la série ait été
+//   vraiment regardée.
+// - "show_seen_episode_latest" (colonnes episode_id/tv_show_name/tv_show_id…) :
+//   le dernier épisode vu par série — garantit qu'au moins un épisode a été vu,
+//   mais ne donne ni le numéro de cet épisode ni le total vu.
+// Aucun des deux ne fournit de compteur d'épisodes exploitable tel quel.
 export function parserCsvTvTime(texte) {
   const lignes = texte.split(/\r?\n/).filter((l) => l.trim().length > 0);
-  if (lignes.length < 2) return [];
+  if (lignes.length < 2) return { format: null, lignes: [] };
 
   const entetes = parseLigneCsv(lignes[0]).map((h) => h.trim());
   const idxNom = entetes.indexOf('tv_show_name');
-  const idxActif = entetes.indexOf('active');
-  const idxArchive = entetes.indexOf('archived');
-
   if (idxNom === -1) {
     throw new Error('Colonne "tv_show_name" introuvable — ce fichier ne semble pas venir de TV Time.');
   }
 
-  return lignes
+  const idxActif = entetes.indexOf('active');
+  const idxArchive = entetes.indexOf('archived');
+  const format = idxActif !== -1 || idxArchive !== -1 ? 'abonnements' : 'episodes_vus';
+
+  const parLigne = lignes
     .slice(1)
     .map((ligne) => {
       const champs = parseLigneCsv(ligne);
@@ -58,6 +64,15 @@ export function parserCsvTvTime(texte) {
       };
     })
     .filter((r) => r.nom);
+
+  // "show_seen_episode_latest" ne devrait avoir qu'une ligne par série, mais on
+  // déduplique par sécurité (garde la première occurrence rencontrée).
+  const parTitre = new Map();
+  for (const l of parLigne) {
+    if (!parTitre.has(l.nom)) parTitre.set(l.nom, l);
+  }
+
+  return { format, lignes: [...parTitre.values()] };
 }
 
 // TV Time suffixe parfois le titre par l'année ("Hunter x Hunter (2011)") pour
@@ -66,9 +81,10 @@ export function nettoyerTitreRecherche(nom) {
   return nom.replace(/\s*\(\d{4}\)\s*$/, '').trim();
 }
 
-// Statut Weebliothèque par défaut déduit des colonnes TV Time — approximatif,
-// TV Time ne fournit pas de vrai statut de progression dans cet export.
-export function statutParDefaut({ actif, archive }) {
+// Statut Weebliothèque par défaut déduit du fichier TV Time — approximatif,
+// aucun des deux formats ne fournit de vrai statut de progression.
+export function statutParDefaut({ actif, archive }, format) {
+  if (format === 'episodes_vus') return 'en_cours'; // au moins un épisode vu, c'est confirmé
   if (actif) return 'en_cours';
   if (archive) return 'arrete';
   return 'pas_commence';

@@ -7,6 +7,7 @@ export default function ImportTVTime({ onImporter }) {
   const [etape, setEtape] = useState('choix'); // choix | recherche | revue | import | fait | erreur
   const [progres, setProgres] = useState({ fait: 0, total: 0 });
   const [lignes, setLignes] = useState([]);
+  const [format, setFormat] = useState(null);
   const [resultatFinal, setResultatFinal] = useState(0);
   const [erreur, setErreur] = useState('');
 
@@ -18,9 +19,10 @@ export default function ImportTVTime({ onImporter }) {
 
     try {
       const texte = await fichier.text();
-      const brut = parserCsvTvTime(texte);
+      const { format, lignes: brut } = parserCsvTvTime(texte);
       if (brut.length === 0) throw new Error('Aucune ligne exploitable dans ce fichier.');
 
+      setFormat(format);
       setEtape('recherche');
       setProgres({ fait: 0, total: brut.length });
 
@@ -64,7 +66,7 @@ export default function ImportTVTime({ onImporter }) {
       .filter((l) => l.inclure && l.choisi)
       .map((l) => {
         const oeuvre = l.resultats.find((r) => String(r.malId) === String(l.choisi));
-        return { ...oeuvre, progression: 0, note: null, statut: statutParDefaut(l) };
+        return { ...oeuvre, progression: 0, note: null, statut: statutParDefaut(l, format) };
       });
 
     try {
@@ -88,10 +90,11 @@ export default function ImportTVTime({ onImporter }) {
       {etape === 'choix' && (
         <>
           <p className="import-tvtime-aide">
-            Exporte tes données depuis TV Time, puis choisis le fichier CSV de tes séries suivies
-            (colonnes <code>tv_show_name</code>, <code>active</code>, <code>archived</code>…). Ce
-            fichier ne contient pas le nombre d'épisodes vus — seuls les titres et un statut
-            approximatif seront importés, à toi d'ajuster la progression ensuite.
+            Exporte tes données depuis TV Time, puis choisis un des fichiers CSV reçus :{' '}
+            <code>subscriptions</code> (séries suivies) ou{' '}
+            <code>show_seen_episode_latest</code> (séries dont au moins un épisode a été vu — plus
+            fiable). Aucun des deux ne donne le nombre exact d'épisodes vus : seuls les titres et
+            un statut approximatif seront importés, à toi d'ajuster la progression ensuite.
           </p>
           <label className="btn-social btn-fichier">
             Choisir le fichier CSV
@@ -109,8 +112,9 @@ export default function ImportTVTime({ onImporter }) {
       {etape === 'revue' && (
         <>
           <p className="import-tvtime-aide">
-            {nbTrouves} / {lignes.length} titres reconnus sur MyAnimeList. Vérifie les
-            correspondances, décoche celles à ignorer, puis confirme.
+            Fichier « {format === 'episodes_vus' ? 'épisodes vus' : 'abonnements'} » — {nbTrouves} /{' '}
+            {lignes.length} titres reconnus sur MyAnimeList. Vérifie les correspondances, décoche
+            celles à ignorer, puis confirme.
           </p>
           <ul className="import-tvtime-liste">
             {lignes.map((l, i) => (
