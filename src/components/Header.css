@@ -115,7 +115,8 @@ nav {
   background: var(--rose-pale);
 }
 
-.btn-menu-mobile {
+.btn-menu-mobile,
+.btn-recherche-mobile {
   display: none;
   background: none;
   border: 1px solid var(--trait);
@@ -131,19 +132,21 @@ nav {
 @media (max-width: 800px) {
   .header-in {
     position: relative;
-    gap: 10px;
+    gap: 8px;
     padding: 10px 14px;
   }
 
-  .logo-kata {
+  .logo-kata,
+  .logo-reste {
     display: none;
   }
 
   .logo {
-    font-size: 1.05rem;
+    font-size: 1.2rem;
   }
 
-  .btn-menu-mobile {
+  .btn-menu-mobile,
+  .btn-recherche-mobile {
     display: flex;
   }
 
@@ -172,8 +175,24 @@ nav {
     padding: 10px 12px;
   }
 
+  /* La barre de recherche prend toute la largeur en volet déroulant plutôt
+     que de rester en ligne — sinon elle n'a quasiment plus de place et
+     devient impossible à utiliser. */
   .recherche-conteneur {
+    display: none;
+  }
+
+  .header-in.recherche-ouverte .recherche-conteneur {
+    display: block;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
     min-width: 0;
-    flex: 1;
+    max-width: none;
+    background: var(--blanc);
+    border-bottom: 1px solid var(--trait);
+    padding: 10px 14px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
   }
 }

@@ -23,6 +23,7 @@ export default function Header({
   onBasculerTheme,
 }) {
   const [menuOuvert, setMenuOuvert] = useState(false);
+  const [rechercheOuverte, setRechercheOuverte] = useState(false);
 
   function naviguer(id) {
     onNaviguer(id);
@@ -31,9 +32,10 @@ export default function Header({
 
   return (
     <header>
-      <div className="header-in">
+      <div className={`header-in${rechercheOuverte ? ' recherche-ouverte' : ''}`}>
         <a href="#" className="logo" onClick={(e) => { e.preventDefault(); naviguer('profil'); }}>
-          <span className="w">Weeb</span>liothèque
+          <span className="w">Weeb</span>
+          <span className="logo-reste">liothèque</span>
           <span className="logo-kata">ウィーブ・図書館</span>
         </a>
         <button
@@ -56,7 +58,21 @@ export default function Header({
             </button>
           ))}
         </nav>
-        <Recherche estDansBiblio={estDansBiblio} onAjouter={onAjouter} />
+        <button
+          className="btn-recherche-mobile"
+          onClick={() => setRechercheOuverte((o) => !o)}
+          aria-label="Rechercher"
+          aria-expanded={rechercheOuverte}
+        >
+          {rechercheOuverte ? '✕' : '🔍'}
+        </button>
+        <Recherche
+          estDansBiblio={estDansBiblio}
+          onAjouter={(oeuvre) => {
+            onAjouter(oeuvre);
+            setRechercheOuverte(false);
+          }}
+        />
         <button
           className="btn-theme"
           onClick={onBasculerTheme}
