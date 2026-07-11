@@ -11,13 +11,14 @@ import {
 import { tempsRelatif } from '../lib/activite';
 import './ImportMAL.css';
 
-export default function ImportMAL({ onImporter }) {
+export default function ImportMAL({ onImporter, onResynchroniser }) {
   const [lie, setLie] = useState(compteLie());
-  const [etat, setEtat] = useState(null); // null | 'liaison' | 'import' | 'fait' | 'erreur'
+  const [etat, setEtat] = useState(null); // null | 'liaison' | 'import' | 'resync' | 'fait' | 'erreur'
   const [progres, setProgres] = useState(0);
   const [resultat, setResultat] = useState(0);
   const [erreurDetail, setErreurDetail] = useState('');
   const [malProfil, setMalProfil] = useState(null);
+  const [derniereAction, setDerniereAction] = useState('import'); // 'import' | 'resync'
   const echangeFait = useRef(false);
 
   // Retour de la redirection OAuth MAL (?code=…&state=liaison-mal).
@@ -65,6 +66,21 @@ export default function ImportMAL({ onImporter }) {
       const entrees = await importerListeMAL(setProgres);
       const total = await onImporter(entrees);
       setResultat(total);
+      setDerniereAction('import');
+      setEtat('fait');
+    } catch (err) {
+      console.error(err);
+      setErreurDetail(err.message);
+      setEtat('erreur');
+    }
+  }
+
+  async function onResync() {
+    setEtat('resync');
+    setProgres(0);
+    try {
+      await onResynchroniser((fait, total) => setProgres({ fait, total }));
+      setDerniereAction('resync');
       setEtat('fait');
     } catch (err) {
       console.error(err);
@@ -113,6 +129,9 @@ export default function ImportMAL({ onImporter }) {
           <button className="btn-social" onClick={onImport}>
             Importer ma liste MAL
           </button>
+          <button className="btn-social secondaire" onClick={onResync} title="Repousse le statut, la progression et la note de toute ta bibliothèque vers MAL — utile après un import TV Time, qui ne synchronise pas automatiquement.">
+            Actualiser MAL avec ma bibliothèque
+          </button>
           <button className="btn-social secondaire" onClick={onDelier}>
             Délier
           </button>
@@ -123,11 +142,26 @@ export default function ImportMAL({ onImporter }) {
         <span className="import-mal-texte">Import en cours… {progres} œuvres récupérées</span>
       )}
 
-      {etat === 'fait' && (
+      {etat === 'resync' && (
+        <span className="import-mal-texte">
+          Actualisation en cours… {progres.fait ?? 0} / {progres.total ?? '?'}
+        </span>
+      )}
+
+      {etat === 'fait' && derniereAction === 'import' && (
         <>
           <span className="import-mal-texte">
             ✓ {resultat} œuvres importées — celles déjà dans ta bibliothèque n'ont pas été modifiées.
           </span>
+          <button className="btn-social secondaire" onClick={() => setEtat(null)}>
+            OK
+          </button>
+        </>
+      )}
+
+      {etat === 'fait' && derniereAction === 'resync' && (
+        <>
+          <span className="import-mal-texte">✓ Ta liste MAL a été actualisée avec ta bibliothèque.</span>
           <button className="btn-social secondaire" onClick={() => setEtat(null)}>
             OK
           </button>

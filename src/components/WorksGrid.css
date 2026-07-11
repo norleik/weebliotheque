@@ -170,6 +170,17 @@
   color: #fff;
 }
 
+/* En sombre, le bouton d'action principal ressort en couleur pleine plutôt
+   qu'en pastel — le pastel clair manque de contraste sur fond sombre. */
+:root[data-theme='dark'] .oeuvre:not(.fini) .btn-suivi:not(:disabled) {
+  background: var(--rouge);
+  color: #fff;
+}
+
+:root[data-theme='dark'] .oeuvre:not(.fini) .btn-suivi:not(:disabled):hover {
+  filter: brightness(0.88);
+}
+
 .fini .btn-suivi {
   background: var(--creme);
   color: var(--gris);

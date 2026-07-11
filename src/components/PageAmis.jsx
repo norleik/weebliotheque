@@ -13,6 +13,7 @@ function ProfilAmi({ ami, onRetour }) {
   const [profil, setProfil] = useState(null);
   const [library, setLibrary] = useState([]);
   const [ongletActif, setOngletActif] = useState(onglets[0].id);
+  const [recherche, setRecherche] = useState('');
 
   useEffect(() => {
     let annule = false;
@@ -66,7 +67,10 @@ function ProfilAmi({ ami, onRetour }) {
   }));
   const estCollection = ongletActif === 'collection';
   const typeActif = onglets.find((o) => o.id === ongletActif)?.type;
-  const oeuvresFiltrees = library.filter((o) => o.type === typeActif);
+  const rechercheNormalisee = recherche.trim().toLowerCase();
+  const correspond = (o) => !rechercheNormalisee || o.titre.toLowerCase().includes(rechercheNormalisee);
+  const oeuvresFiltrees = library.filter((o) => o.type === typeActif && correspond(o));
+  const collectionFiltree = library.filter(correspond);
 
   return (
     <div>
@@ -86,9 +90,11 @@ function ProfilAmi({ ami, onRetour }) {
         ongletActif={ongletActif}
         onChangeOnglet={setOngletActif}
         titre="Sa bibliothèque"
+        recherche={recherche}
+        onChangeRecherche={setRecherche}
       />
       {estCollection ? (
-        <Collection oeuvres={library} lectureSeule />
+        <Collection oeuvres={collectionFiltree} lectureSeule />
       ) : typeActif === 'ANIMÉ' ? (
         <GrilleAnimes oeuvres={oeuvresFiltrees} lectureSeule />
       ) : (

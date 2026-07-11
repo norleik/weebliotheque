@@ -115,10 +115,63 @@ nav {
   background: var(--rose-pale);
 }
 
+.btn-menu-mobile {
+  display: none;
+  background: none;
+  border: 1px solid var(--trait);
+  border-radius: 8px;
+  width: 38px;
+  height: 38px;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+}
+
 @media (max-width: 800px) {
-  nav {
+  .header-in {
+    position: relative;
+    gap: 10px;
+    padding: 10px 14px;
+  }
+
+  .logo-kata {
     display: none;
   }
+
+  .logo {
+    font-size: 1.05rem;
+  }
+
+  .btn-menu-mobile {
+    display: flex;
+  }
+
+  nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex: initial;
+    flex-direction: column;
+    gap: 2px;
+    background: var(--blanc);
+    border-bottom: 1px solid var(--trait);
+    padding: 10px 14px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
+  }
+
+  nav.ouvert {
+    display: flex;
+  }
+
+  .nav-item {
+    width: 100%;
+    text-align: left;
+    padding: 10px 12px;
+  }
+
   .recherche-conteneur {
     min-width: 0;
     flex: 1;

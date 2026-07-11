@@ -1,7 +1,16 @@
 import { STATUTS } from './WorksGrid';
 import './LibraryTabs.css';
 
-export default function LibraryTabs({ onglets, ongletActif, onChangeOnglet, filtreStatut, onChangeFiltre, titre = 'Ma bibliothèque' }) {
+export default function LibraryTabs({
+  onglets,
+  ongletActif,
+  onChangeOnglet,
+  filtreStatut,
+  onChangeFiltre,
+  recherche,
+  onChangeRecherche,
+  titre = 'Ma bibliothèque',
+}) {
   return (
     <div className="biblio-tete">
       <h2>{titre}</h2>
@@ -16,8 +25,15 @@ export default function LibraryTabs({ onglets, ongletActif, onChangeOnglet, filt
           </button>
         ))}
       </div>
-      {onChangeFiltre && (
-        <div className="filtres">
+      <div className="filtres">
+        <input
+          type="text"
+          className="filtre-recherche"
+          placeholder="Rechercher un titre…"
+          value={recherche}
+          onChange={(e) => onChangeRecherche(e.target.value)}
+        />
+        {onChangeFiltre && (
           <select className="filtre" value={filtreStatut} onChange={(e) => onChangeFiltre(e.target.value)}>
             <option value="tous">Tous les statuts</option>
             {STATUTS.map((s) => (
@@ -26,8 +42,8 @@ export default function LibraryTabs({ onglets, ongletActif, onChangeOnglet, filt
               </option>
             ))}
           </select>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

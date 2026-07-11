@@ -14,15 +14,15 @@
 }
 
 :root[data-theme='dark'] {
-  --blanc: #261d20;
-  --creme: #1a1315;
-  --trait: #3d2e32;
-  --encre: #f5ecee;
-  --gris: #a8969a;
+  --blanc: #201d1f;
+  --creme: #141215;
+  --trait: #332f31;
+  --encre: #f5eef0;
+  --gris: #a79ba0;
   --rouge: #e63946;
-  --rouge-fonce: #a31621;
+  --rouge-fonce: #ff5a6a;
   --rose: #ffb3c1;
-  --rose-pale: #38242a;
+  --rose-pale: #33242b;
   color-scheme: dark;
 }
 

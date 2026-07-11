@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Recherche from './Recherche';
 import Avatar from './Avatar';
 import './Header.css';
@@ -21,19 +22,34 @@ export default function Header({
   theme,
   onBasculerTheme,
 }) {
+  const [menuOuvert, setMenuOuvert] = useState(false);
+
+  function naviguer(id) {
+    onNaviguer(id);
+    setMenuOuvert(false);
+  }
+
   return (
     <header>
       <div className="header-in">
-        <a href="#" className="logo" onClick={(e) => { e.preventDefault(); onNaviguer('profil'); }}>
+        <a href="#" className="logo" onClick={(e) => { e.preventDefault(); naviguer('profil'); }}>
           <span className="w">Weeb</span>liothèque
           <span className="logo-kata">ウィーブ・図書館</span>
         </a>
-        <nav>
+        <button
+          className="btn-menu-mobile"
+          onClick={() => setMenuOuvert((o) => !o)}
+          aria-label="Menu"
+          aria-expanded={menuOuvert}
+        >
+          {menuOuvert ? '✕' : '☰'}
+        </button>
+        <nav className={menuOuvert ? 'ouvert' : ''}>
           {LIENS_NAV.map((lien) => (
             <button
               key={lien.id}
               className={`nav-item${lien.id === pageActive ? ' actif' : ''}${lien.inactif ? ' inactif' : ''}`}
-              onClick={() => !lien.inactif && onNaviguer(lien.id)}
+              onClick={() => !lien.inactif && naviguer(lien.id)}
               title={lien.inactif ? 'Bientôt disponible' : undefined}
             >
               {lien.label}

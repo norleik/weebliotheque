@@ -249,6 +249,23 @@ export function useLibrary(userId) {
     }
   }
 
+  // Repousse toute la bibliothèque vers MAL. Un import en masse (TV Time,
+  // et l'import MAL lui-même) n'écrit que dans Supabase — sans ceci, le
+  // compte MAL lié reste désynchronisé tant qu'on ne touche pas chaque
+  // œuvre une par une (incrémenter/décrémenter un épisode).
+  async function resynchroniserVersMAL(onProgres) {
+    for (let i = 0; i < library.length; i++) {
+      const entree = library[i];
+      await synchroniserVersMAL(entree, {
+        statut: entree.statut,
+        progression: entree.progression,
+        note: entree.note,
+      });
+      onProgres?.(i + 1, library.length);
+      await new Promise((r) => setTimeout(r, 300));
+    }
+  }
+
   return {
     library,
     chargement,
@@ -261,5 +278,6 @@ export function useLibrary(userId) {
     toutMarquer,
     definirStatut,
     definirNote,
+    resynchroniserVersMAL,
   };
 }
