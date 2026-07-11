@@ -1,0 +1,92 @@
+.import-tvtime {
+  margin-bottom: 28px;
+}
+
+.import-tvtime h2 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.import-tvtime-aide {
+  font-size: 0.82rem;
+  color: var(--gris);
+  margin-bottom: 12px;
+}
+
+.import-tvtime-aide code {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.78rem;
+  background: var(--creme);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+.import-tvtime-aide.erreur {
+  color: var(--rouge);
+}
+
+.btn-fichier {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.import-tvtime-liste {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 360px;
+  overflow-y: auto;
+  margin-bottom: 14px;
+}
+
+.import-tvtime-liste li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  border-radius: 10px;
+  transition: background 0.15s;
+}
+
+.import-tvtime-liste li:hover {
+  background: var(--rose-pale);
+}
+
+.import-tvtime-liste li.non-trouve {
+  opacity: 0.55;
+}
+
+.import-tvtime-liste input[type='checkbox'] {
+  flex-shrink: 0;
+  accent-color: var(--rouge);
+}
+
+.import-tvtime-nom {
+  font-size: 0.85rem;
+  font-weight: 500;
+  flex: 0 0 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.import-tvtime-liste select {
+  flex: 1;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.8rem;
+  color: var(--encre);
+  background: var(--creme);
+  border: 1px solid var(--trait);
+  border-radius: 8px;
+  padding: 5px 8px;
+}
+
+.import-tvtime-aucun {
+  flex: 1;
+  font-size: 0.78rem;
+  color: var(--gris);
+  font-style: italic;
+}

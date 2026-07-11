@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import ProfileBanner from './ProfileBanner';
 import ImportMAL from './ImportMAL';
+import ImportTVTime from './ImportTVTime';
 import StatsGrid from './StatsGrid';
 import ListesBande from './ListesBande';
 import LibraryTabs from './LibraryTabs';
@@ -39,6 +40,7 @@ export default function PageProfil({ userId, utilisateur, onModifier, onUploader
     <>
       <ProfileBanner utilisateur={utilisateur} onModifier={onModifier} onUploaderAvatar={onUploaderAvatar} />
       <ImportMAL onImporter={importerOeuvres} />
+      <ImportTVTime onImporter={importerOeuvres} />
       <StatsGrid stats={stats} />
       <ListesBande userId={userId} proprietaire library={library} />
       <LibraryTabs

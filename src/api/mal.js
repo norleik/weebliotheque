@@ -78,6 +78,18 @@ export async function rechercherOeuvres(query, { signal } = {}) {
   ];
 }
 
+// Recherche animé seul (une requête au lieu de deux) — utilisé pour les imports
+// en masse (TV Time) où l'on ne cherche que des séries, pas des mangas.
+export async function rechercherAnime(query) {
+  const q = query.trim();
+  if (q.length < 3) return [];
+
+  const res = await fetch(urlProxy(`anime?q=${encodeURIComponent(q)}&limit=5&fields=${CHAMPS_ANIME}`));
+  if (!res.ok) throw new Error('Erreur lors de la recherche MAL');
+  const data = await res.json();
+  return (data.data ?? []).map((d) => mapAnime(d.node));
+}
+
 const SAISONS_FR = { winter: 'Hiver', spring: 'Printemps', summer: 'Été', fall: 'Automne' };
 
 function saisonCourante(date = new Date()) {

@@ -42,29 +42,29 @@
 
 .avatar-zone {
   position: relative;
-  top: -48px;
+  top: -64px;
 }
 
 .banner-corps .avatar {
-  width: 88px;
-  height: 88px;
-  font-size: 2rem;
-  border: 4px solid var(--blanc);
-  border-radius: 22px;
-  box-shadow: 0 4px 16px rgba(214, 40, 57, 0.25);
+  width: 128px;
+  height: 128px;
+  font-size: 3rem;
+  border: 5px solid var(--blanc);
+  border-radius: 28px;
+  box-shadow: 0 6px 20px rgba(214, 40, 57, 0.25);
 }
 
 .btn-avatar-edit {
   position: absolute;
   right: -4px;
   bottom: -4px;
-  width: 30px;
-  height: 30px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   background: var(--rouge);
   color: #fff;
-  border: 2px solid var(--blanc);
-  font-size: 0.85rem;
+  border: 3px solid var(--blanc);
+  font-size: 1.05rem;
   display: grid;
   place-items: center;
   transition: background 0.15s;
