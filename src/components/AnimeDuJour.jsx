@@ -128,7 +128,14 @@ export default function AnimeDuJour({ userId }) {
         <div className="aj-jeu">
           <div className="aj-affiche">
             {cible.image && (
-              <img src={cible.image} alt="" style={{ filter: `blur(${niveauBlur}px)` }} />
+              <img
+                src={cible.image}
+                alt=""
+                draggable={false}
+                onDragStart={(e) => e.preventDefault()}
+                onContextMenu={(e) => e.preventDefault()}
+                style={{ filter: `blur(${niveauBlur}px)` }}
+              />
             )}
           </div>
 
