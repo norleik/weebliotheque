@@ -38,6 +38,20 @@
   gap: 20px;
 }
 
+.groupe-vues {
+  display: flex;
+  gap: 6px;
+  margin-top: -8px;
+}
+
+.minijeux-entete {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
 .groupe-entete {
   display: flex;
   align-items: flex-start;

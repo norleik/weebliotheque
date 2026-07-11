@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { tempsRelatif, messageActivite } from '../lib/activite';
+import { useTierlists } from '../hooks/useTierlists';
 import Avatar from './Avatar';
+import TierlistEditor from './TierlistEditor';
 import './PageGroupes.css';
 
 function Pseudo({ pseudo, estMoi }) {
@@ -12,6 +14,72 @@ function Pseudo({ pseudo, estMoi }) {
   );
 }
 
+function MiniJeux({ groupe, moi }) {
+  const { tierlists, chargement, creerTierlist, supprimerTierlist } = useTierlists(groupe.id);
+  const [tierlistOuverte, setTierlistOuverte] = useState(null);
+  const [erreur, setErreur] = useState('');
+  const [creation, setCreation] = useState(false);
+
+  async function onCreer() {
+    const nom = window.prompt('Nom de la tierlist :', 'Tierlist animés');
+    if (!nom || !nom.trim()) return;
+    setErreur('');
+    setCreation(true);
+    try {
+      const id = await creerTierlist(nom.trim().slice(0, 60));
+      setTierlistOuverte(id);
+    } catch (err) {
+      setErreur(err.message);
+    } finally {
+      setCreation(false);
+    }
+  }
+
+  const ouverte = tierlists.find((t) => t.id === tierlistOuverte);
+  if (ouverte) {
+    return <TierlistEditor tierlist={ouverte} onFermer={() => setTierlistOuverte(null)} />;
+  }
+
+  return (
+    <section className="carte-sociale">
+      <div className="minijeux-entete">
+        <h2>🎮 Mini-jeux</h2>
+        <button className="btn-social" onClick={onCreer} disabled={creation}>
+          + Nouvelle tierlist
+        </button>
+      </div>
+      <p className="import-tvtime-aide">
+        Classe en direct avec les membres du groupe les œuvres vues en commun (au moins 2 membres)
+        — S la meilleure, F la moins bonne. Chaque déplacement est visible par tout le monde en
+        temps réel.
+      </p>
+      {erreur && <p className="import-tvtime-aide erreur">{erreur}</p>}
+      {chargement && <p className="vide-social">Chargement…</p>}
+      {!chargement && tierlists.length === 0 && (
+        <p className="vide-social">Aucune tierlist pour l'instant — crée-en une !</p>
+      )}
+      {tierlists.length > 0 && (
+        <ul className="liste-sociale">
+          {tierlists.map((t) => (
+            <li key={t.id}>
+              <span className="pseudo-social">{t.titre}</span>
+              <span className="etat-social">par {t.profiles?.pseudo ?? '?'}</span>
+              <button className="btn-social" onClick={() => setTierlistOuverte(t.id)}>
+                Ouvrir
+              </button>
+              {t.createur === moi && (
+                <button className="btn-social secondaire" onClick={() => supprimerTierlist(t.id)}>
+                  Supprimer
+                </button>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  );
+}
+
 function DetailGroupe({ groupe, moi, chargerDetails, quitterGroupe, envoyerMessage, onQuitte }) {
   const [membres, setMembres] = useState([]);
   const [elements, setElements] = useState([]);
@@ -20,6 +88,7 @@ function DetailGroupe({ groupe, moi, chargerDetails, quitterGroupe, envoyerMessa
   const [reponseA, setReponseA] = useState(null);
   const [brouillon, setBrouillon] = useState('');
   const [envoi, setEnvoi] = useState(false);
+  const [vue, setVue] = useState('fil'); // 'fil' | 'minijeux'
   const filRef = useRef(null);
 
   const rafraichir = useCallback(async () => {
@@ -86,6 +155,18 @@ function DetailGroupe({ groupe, moi, chargerDetails, quitterGroupe, envoyerMessa
         </button>
       </div>
 
+      <div className="groupe-vues">
+        <button className={`onglet${vue === 'fil' ? ' actif' : ''}`} onClick={() => setVue('fil')}>
+          Fil
+        </button>
+        <button className={`onglet${vue === 'minijeux' ? ' actif' : ''}`} onClick={() => setVue('minijeux')}>
+          🎮 Mini-jeux
+        </button>
+      </div>
+
+      {vue === 'minijeux' && <MiniJeux groupe={groupe} moi={moi} />}
+
+      {vue === 'fil' && (
       <div className="groupe-colonnes">
         <section className="carte-sociale colonne-fil">
           <h2>
@@ -179,6 +260,7 @@ function DetailGroupe({ groupe, moi, chargerDetails, quitterGroupe, envoyerMessa
           </ul>
         </section>
       </div>
+      )}
     </div>
   );
 }

@@ -1,0 +1,131 @@
+.tierlist-editeur {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tierlist-entete {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.tierlist-entete h3 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.tierlist-entete .btn-retour {
+  margin-bottom: 0;
+}
+
+.tierlist-rangee {
+  display: flex;
+  align-items: stretch;
+  min-height: 84px;
+  border: 1px solid var(--trait);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--blanc);
+}
+
+.tierlist-label {
+  flex: 0 0 56px;
+  display: grid;
+  place-items: center;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 1.3rem;
+  color: #fff;
+}
+
+.tier-s .tierlist-label {
+  background: var(--rouge-fonce);
+}
+.tier-a .tierlist-label {
+  background: var(--rouge);
+}
+.tier-b .tierlist-label {
+  background: var(--rose);
+  color: var(--encre);
+}
+.tier-c .tierlist-label {
+  background: var(--rose-pale);
+  color: var(--encre);
+}
+.tier-d .tierlist-label {
+  background: var(--trait);
+  color: var(--encre);
+}
+.tier-f .tierlist-label {
+  background: var(--gris);
+}
+
+.tierlist-cartes {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 8px;
+  padding: 8px;
+}
+
+.tierlist-carte {
+  width: 64px;
+  height: 84px;
+  border-radius: 8px;
+  background-color: var(--creme);
+  background-size: cover;
+  background-position: center;
+  border: 1px solid var(--trait);
+  cursor: grab;
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-end;
+  transition: transform 0.12s;
+}
+
+.tierlist-carte:hover {
+  transform: translateY(-3px);
+}
+
+.tierlist-carte:active {
+  cursor: grabbing;
+}
+
+.tierlist-carte-titre {
+  font-size: 0.55rem;
+  font-weight: 600;
+  color: var(--encre);
+  padding: 3px;
+  line-height: 1.1;
+}
+
+.tierlist-pool {
+  display: flex;
+  align-items: stretch;
+  min-height: 100px;
+  border: 1.5px dashed var(--trait);
+  border-radius: 12px;
+  margin-top: 6px;
+}
+
+.tierlist-label-pool {
+  background: none;
+  color: var(--gris);
+  font-size: 0.7rem;
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tierlist-vide {
+  align-self: center;
+  font-size: 0.8rem;
+  color: var(--gris);
+  font-style: italic;
+}

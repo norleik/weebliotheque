@@ -5,7 +5,7 @@ import './Header.css';
 const LIENS_NAV = [
   { id: 'profil', label: 'Profil' },
   { id: 'amis', label: 'Amis' },
-  { id: 'groupes', label: 'Groupes' },
+  { id: 'groupes', label: 'Communauté' },
   { id: 'decouvrir', label: 'Découvrir' },
   { id: 'calendrier', label: 'Calendrier' },
 ];
