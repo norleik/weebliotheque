@@ -105,10 +105,24 @@ export function WorkCard({
         <div className="barre">
           <i style={{ width: `${total ? Math.min(100, Math.round((progression / total) * 100)) : fini ? 100 : 0}%` }} />
         </div>
-        {lectureSeule || fini ? (
+        {lectureSeule ? (
           <a className="btn-suivi" href={url} target="_blank" rel="noreferrer">
             {fini ? 'Revoir la fiche' : 'Voir la fiche'}
           </a>
+        ) : fini ? (
+          <div className="ligne-progression">
+            <button
+              className="btn-mini"
+              onClick={() => onDecrementer(malId)}
+              disabled={progression === 0}
+              title="Retirer un épisode vu"
+            >
+              −
+            </button>
+            <a className="btn-suivi" href={url} target="_blank" rel="noreferrer">
+              Revoir la fiche
+            </a>
+          </div>
         ) : pasEncoreSorti ? (
           <button className="btn-suivi" disabled title="Pas encore diffusé sur MAL">
             Pas encore diffusé
