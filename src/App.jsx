@@ -58,8 +58,6 @@ function App() {
   return (
     <>
       <Header
-        initiale={utilisateurAffiche.initiale}
-        avatarUrl={utilisateurAffiche.avatarUrl}
         pageActive={page}
         onNaviguer={setPage}
         estDansBiblio={bibliotheque.estDansBiblio}

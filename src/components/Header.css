@@ -90,13 +90,6 @@ nav {
   background: var(--rose-pale);
 }
 
-.header-in .avatar {
-  width: 38px;
-  height: 38px;
-  font-size: 0.9rem;
-  cursor: pointer;
-}
-
 .btn-deconnexion {
   background: none;
   border: 1px solid var(--trait);

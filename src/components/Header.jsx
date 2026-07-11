@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import Recherche from './Recherche';
-import Avatar from './Avatar';
 import './Header.css';
 
 const LIENS_NAV = [
@@ -12,8 +11,6 @@ const LIENS_NAV = [
 ];
 
 export default function Header({
-  initiale = 'L',
-  avatarUrl,
   pageActive,
   onNaviguer,
   estDansBiblio,
@@ -80,12 +77,6 @@ export default function Header({
         >
           {theme === 'sombre' ? '☀️' : '🌙'}
         </button>
-        <Avatar
-          url={avatarUrl}
-          pseudo={initiale}
-          title="Mon profil"
-          onClick={() => onNaviguer('profil')}
-        />
         <button className="btn-deconnexion" onClick={onDeconnexion} title="Se déconnecter">
           🚪
         </button>
