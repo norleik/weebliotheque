@@ -3,6 +3,7 @@ import { tempsRelatif, messageActivite } from '../lib/activite';
 import { useTierlists } from '../hooks/useTierlists';
 import Avatar from './Avatar';
 import TierlistEditor from './TierlistEditor';
+import VoteSaison from './VoteSaison';
 import './PageGroupes.css';
 
 function Pseudo({ pseudo, estMoi }) {
@@ -319,6 +320,8 @@ export default function PageGroupes({ moi, groups }) {
 
   return (
     <div className="page-groupes">
+      <VoteSaison userId={moi} />
+
       <div className="groupe-formulaires">
         <section className="carte-sociale">
           <h2>Créer un groupe</h2>

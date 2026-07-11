@@ -98,6 +98,13 @@ function saisonCourante(date = new Date()) {
   return { saison, annee: date.getFullYear() };
 }
 
+// Identifiant stable de la saison en cours (ex : "2026-summer") — sert de clé
+// pour le vote de saison (une entrée par utilisateur et par saison).
+export function saisonId(date = new Date()) {
+  const { saison, annee } = saisonCourante(date);
+  return `${annee}-${saison}`;
+}
+
 const PAR_PAGE = 24;
 
 export async function sortiesSaison(page = 1) {
