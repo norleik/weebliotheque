@@ -170,8 +170,9 @@ nav {
 
   /* La barre de recherche prend toute la largeur en volet déroulant plutôt
      que de rester en ligne — sinon elle n'a quasiment plus de place et
-     devient impossible à utiliser. */
-  .recherche-conteneur {
+     devient impossible à utiliser. Scopé à .header-in : .recherche-conteneur
+     est réutilisé ailleurs (ex. Anime du Jour) et ne doit pas en hériter. */
+  .header-in .recherche-conteneur {
     display: none;
   }
 

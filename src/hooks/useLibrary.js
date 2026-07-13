@@ -16,6 +16,7 @@ function depuisLigne(ligne) {
     statut: ligne.statut,
     dateAjout: ligne.date_ajout,
     pasEncoreSorti: ligne.pas_encore_sorti,
+    revisionnages: ligne.revisionnages ?? 0,
   };
 }
 
@@ -211,6 +212,34 @@ export function useLibrary(userId) {
     synchroniserVersMAL(entree, { statut: patch.statut, progression: patch.progression });
   }
 
+  // Compteur de revisionnages ("j'ai vu SNK 4 fois") — purement informatif
+  // côté Weebliothèque, jamais poussé vers MAL (qui n'a pas cette notion).
+  async function incrementerRevisionnage(malId) {
+    const entree = library.find((o) => o.malId === malId);
+    if (!entree) return;
+    const revisionnages = entree.revisionnages + 1;
+    const { error } = await supabase
+      .from('library_entries')
+      .update({ revisionnages })
+      .eq('user_id', userId)
+      .eq('mal_id', malId);
+    if (error) return console.error(error);
+    setLibrary((lib) => lib.map((o) => (o.malId === malId ? { ...o, revisionnages } : o)));
+  }
+
+  async function decrementerRevisionnage(malId) {
+    const entree = library.find((o) => o.malId === malId);
+    if (!entree || entree.revisionnages <= 0) return;
+    const revisionnages = entree.revisionnages - 1;
+    const { error } = await supabase
+      .from('library_entries')
+      .update({ revisionnages })
+      .eq('user_id', userId)
+      .eq('mal_id', malId);
+    if (error) return console.error(error);
+    setLibrary((lib) => lib.map((o) => (o.malId === malId ? { ...o, revisionnages } : o)));
+  }
+
   async function definirStatut(malId, statut) {
     const entree = library.find((o) => o.malId === malId);
     if (!entree || entree.statut === statut) return;
@@ -276,6 +305,8 @@ export function useLibrary(userId) {
     incrementerProgression,
     decrementerProgression,
     toutMarquer,
+    incrementerRevisionnage,
+    decrementerRevisionnage,
     definirStatut,
     definirNote,
     resynchroniserVersMAL,

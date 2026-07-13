@@ -16,9 +16,14 @@ export function calculerStats(library, episodesCeMois = null) {
   const animes = library.filter((o) => o.type === 'ANIMÉ');
   const lectures = library.filter((o) => o.type !== 'ANIMÉ');
 
-  const episodesVus = animes.reduce((somme, o) => somme + (o.progression || 0), 0);
+  // Un revisionnage compte pour un visionnage complet de plus (tous ses
+  // épisodes) — ex : SNK revu 4 fois ajoute 4 × 25 épisodes aux stats.
+  const episodesEffectifs = (o) =>
+    (o.progression || 0) + (o.revisionnages || 0) * (o.total || o.progression || 0);
+
+  const episodesVus = animes.reduce((somme, o) => somme + episodesEffectifs(o), 0);
   const minutes = animes.reduce(
-    (somme, o) => somme + (o.progression || 0) * (o.dureeEpisode ?? DUREE_EPISODE_DEFAUT),
+    (somme, o) => somme + episodesEffectifs(o) * (o.dureeEpisode ?? DUREE_EPISODE_DEFAUT),
     0,
   );
   const chapitresLus = lectures.reduce((somme, o) => somme + (o.progression || 0), 0);

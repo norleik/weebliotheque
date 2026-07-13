@@ -54,11 +54,13 @@ export function WorkCard({
   onIncrementer,
   onDecrementer,
   onToutMarquer,
+  onIncrementerRevisionnage,
+  onDecrementerRevisionnage,
   onDefinirNote,
   onDefinirStatut,
   onRetirer,
 }) {
-  const { malId, titre, type, note, image, total, progression, statut, url, pasEncoreSorti } = oeuvre;
+  const { malId, titre, type, note, image, total, progression, statut, url, pasEncoreSorti, revisionnages } = oeuvre;
   const unite = UNITE[type] ?? UNITE.MANGA;
   const fini = statut === 'termine';
   const arrete = statut === 'arrete';
@@ -157,6 +159,28 @@ export function WorkCard({
             )}
           </div>
         )}
+        {!lectureSeule && type === 'ANIMÉ' && fini && (
+          <div className="revisionnage">
+            <button
+              className="btn-mini"
+              onClick={() => onDecrementerRevisionnage(malId)}
+              disabled={!revisionnages}
+              title="Retirer un revisionnage"
+            >
+              −
+            </button>
+            <span className="revisionnage-compte" title="Nombre de fois entièrement vu">
+              🔁 Vu {revisionnages + 1}×
+            </span>
+            <button
+              className="btn-mini"
+              onClick={() => onIncrementerRevisionnage(malId)}
+              title="Marquer un revisionnage de plus"
+            >
+              +
+            </button>
+          </div>
+        )}
         {!lectureSeule && (
           <div className="liens-secondaires">
             <a className="lien-fiche" href={url} target="_blank" rel="noreferrer" title="Voir la fiche MAL">
@@ -190,6 +214,8 @@ export default function WorksGrid({
   onIncrementer,
   onDecrementer,
   onToutMarquer,
+  onIncrementerRevisionnage,
+  onDecrementerRevisionnage,
   onDefinirNote,
   onDefinirStatut,
   onRetirer,
@@ -212,6 +238,8 @@ export default function WorksGrid({
           onIncrementer={onIncrementer}
           onDecrementer={onDecrementer}
           onToutMarquer={onToutMarquer}
+          onIncrementerRevisionnage={onIncrementerRevisionnage}
+          onDecrementerRevisionnage={onDecrementerRevisionnage}
           onDefinirNote={onDefinirNote}
           onDefinirStatut={onDefinirStatut}
           onRetirer={onRetirer}
