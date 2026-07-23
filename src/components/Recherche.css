@@ -97,6 +97,11 @@
   text-overflow: ellipsis;
 }
 
+.resultat-titre:hover {
+  color: var(--rouge);
+  text-decoration: underline;
+}
+
 .resultat-btn {
   font-size: 0.72rem;
   font-weight: 600;

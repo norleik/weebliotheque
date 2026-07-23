@@ -67,7 +67,16 @@ export default function Recherche({ estDansBiblio, onAjouter }) {
                 {oeuvre.image && <img src={oeuvre.image} alt="" />}
                 <div className="resultat-info">
                   <span className="resultat-type">{oeuvre.type}</span>
-                  <span className="resultat-titre">{oeuvre.titre}</span>
+                  <a
+                    className="resultat-titre"
+                    href={oeuvre.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    onMouseDown={(e) => e.preventDefault()}
+                    title="Voir la fiche MAL"
+                  >
+                    {oeuvre.titre}
+                  </a>
                 </div>
                 <button
                   className="resultat-btn"
